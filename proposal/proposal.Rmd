@@ -1,24 +1,56 @@
 ---
-title: "Project proposal"
-author: "Team name"
+title: "Healthcare Access in Maine"
+author: "Cedar Callahan"
 output: github_document
 ---
 
 ```{r load-packages, message = FALSE}
 library(tidyverse)
 library(broom)
+library(tidymodels)
 ```
+
+```{r load-data, message = FALSE}
+ahrf_2019_2023 <- read.csv("/cloud/project/data/ahrf_2019_2023.csv")
+```
+
 
 ## 1. Introduction
 
-
+This project will be done using the Area Health Resource Files (AHRF) data collected by the Health Resources and Services Administration. The collected data is between 5000 and 75000 variables (depending on the year), most of which I will not be using. After selecting for specific variables, the data includes 357 columns and 64 rows. My primary research question concerns the distribution of medical professionals. Is the number of medical professionals per county proportional to the population of each county? Within that, I am curious about the distribution of specialists, the average distance to the nearest hospital, and insurance coverage. While the `ahrf_2019_2023` dataset is the primary dataset, I will be loading in additional data as needed. 
 
 ## 2. Data
 
+```{r glimpse-data}
+glimpse(ahrf_2019_2023)
+```
 
 ## 3. Ethics review
 
+The data included in the AHRF comes from many sources, including the American Community Survey (ACS), the Centers for Medicare & Medicaid Services (CMS), the American Hospital Association, the American Dental Association, and the American Medical Association. I have very little information about the data collection and inital analysis done by the respective organizations. Also, due to the small amount of time I have for this project, I had to cut out large amounts of the provided data, so this analysis will be, in many ways, incomplete. However, this data is incredibly comprehensive and easily accessible, making it a logical choice for this project. While I am sure this data has many positive effects, such as highlighting the unique challenges faced by people and medical providers in rural areas, I am curious as to who is not included in this data. 
+
 ## 4. Data analysis plan
 
+I am hoping to do some modeling that will show the change in the number of medical providers over time and changes in the availability of medical services over time. The explanatory variables I am planning to use include `year`, `county_name`, `econ_depndnt_typolgy_15`, `lo_eductn_typolgy_15`, `lo_emplymt_typolgy_15`, `prstnt_povty_typolgy_14`,`prstnt_child_povty_typolgy_15`, `popn_loss_typolgy_15`, and some of the variables surrounding the number of hospitals or type of care provided in each county. The response variables I am planning to use include the variables measuring the HPSA primary care, dental care, and mental health care access designation in each county, as well as the number of primary care physicians. 
 
+I am curious how the number of hospitals in each county does or does not correlate with the HPSA (Health Professional Shortage Area) designation. 
+```{r preliminary-models}
+(hosp_prim_care_18 <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  fit(hosp_18 ~ hpsa_prim_care_18, data = ahrf_2019_2023))
+
+hosp_prim_care_18 %>% 
+  tidy()
+```
+
+I am also planning to explore the number of providers each year, economic dependency types, hospitals, and HPSA designations with poverty and education levels by county. 
+
+```{r initial-visualization-1}
+ahrf_2019_2023 %>% 
+  ggplot(aes(x = county_name, y = econ_depndnt_typolgy_15, fill = econ_depndnt_typolgy_15)) + 
+  geom_col() +
+  coord_flip() +
+  scale_fill_viridis_c(end = .8) +
+  facet_wrap(~ year)
+```
 
