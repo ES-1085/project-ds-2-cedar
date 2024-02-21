@@ -11,7 +11,7 @@ library(tidymodels)
 ```
 
 ```{r load-data, message = FALSE}
-ahrf_2019_2023 <- read.csv("/cloud/project/data/ahrf_2019_2023.csv")
+ahrf_2019_2023 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2019_2023.csv")
 ```
 
 

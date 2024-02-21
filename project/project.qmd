@@ -12,17 +12,78 @@ library(tidyverse)
 ```
 
 ```{r load-data}
-ahrf_2019_2020 <- read.csv("/cloud/project/data/ahrf_2019_2020_maine.csv")
-ahrf_2020_2021 <- read.csv("/cloud/project/data/ahrf_2020_2021_maine.csv")
-ahrf_2021_2022 <- read.csv("/cloud/project/data/ahrf_2021_2022_maine.csv")
-ahrf_2022_2023 <- read.csv("/cloud/project/data/ahrf_2022_2023_maine.csv")
+ahrf_2019_2020 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2019_2020_maine.csv")
+ahrf_2020_2021 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2020_2021_maine.csv")
+ahrf_2021_2022 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2021_2022_maine.csv")
+ahrf_2022_2023 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2022_2023_maine.csv")
 ```
 
 # Initial Exploration
 
-```{r}
+```{r data-subsets-hpsa-and-county}
 hpsa_areas <- ahrf_2019_2023 %>% 
-  select()
+  select(year, county_name, hpsa_prim_care_23, hpsa_prim_care_22, hpsa_prim_care_21, hpsa_prim_care_20, hpsa_prim_care_19, hpsa_prim_care_18, hpsa_prim_care_17, hpsa_prim_care_16, hpsa_prim_care_15, hpsa_prim_care_10, hpsa_dent_23,hpsa_dent_22, hpsa_dent_21, hpsa_dent_20, hpsa_dent_19, hpsa_dent_18, hpsa_dent_17, hpsa_dent_16, hpsa_dent_15, hpsa_dent_10, hpsa_mentl_hlth_23, hpsa_mentl_hlth_22, hpsa_mentl_hlth_21, hpsa_mentl_hlth_20, hpsa_mentl_hlth_19, hpsa_mentl_hlth_18, hpsa_mentl_hlth_17, hpsa_mentl_hlth_16, hpsa_mentl_hlth_15, hpsa_mentl_hlth_10)
+
+hpsa_primary_care <- ahrf_2019_2023 %>% 
+  select(year, county_name, hpsa_prim_care_23, hpsa_prim_care_22, hpsa_prim_care_21, hpsa_prim_care_20, hpsa_prim_care_19, hpsa_prim_care_18, hpsa_prim_care_17, hpsa_prim_care_16, hpsa_prim_care_15, hpsa_prim_care_10)
+
+hpsa_dental_care <- ahrf_2019_2023 %>% 
+  select(year, county_name, hpsa_dent_23,hpsa_dent_22, hpsa_dent_21, hpsa_dent_20, hpsa_dent_19, hpsa_dent_18, hpsa_dent_17, hpsa_dent_16, hpsa_dent_15, hpsa_dent_10)
+
+hpsa_mh_care <- ahrf_2019_2023 %>% 
+  select(year, county_name, hpsa_mentl_hlth_23, hpsa_mentl_hlth_22, hpsa_mentl_hlth_21, hpsa_mentl_hlth_20, hpsa_mentl_hlth_19, hpsa_mentl_hlth_18, hpsa_mentl_hlth_17, hpsa_mentl_hlth_16, hpsa_mentl_hlth_15, hpsa_mentl_hlth_10)
+
+androscoggin <- ahrf_2019_2023 %>% 
+  filter(county_name == "Androscoggin")
+
+aroostook <- ahrf_2019_2023 %>% 
+  filter(county_name == "Aroostook")
+
+cumberland <- ahrf_2019_2023 %>% 
+  filter(county_name == "Cumberland")
+
+franklin <- ahrf_2019_2023 %>% 
+  filter(county_name == "Franklin")
+
+hancock <- ahrf_2019_2023 %>% 
+  filter(county_name == "Hancock")
+
+kennebec <- ahrf_2019_2023 %>% 
+  filter(county_name == "Kennebec")
+
+knox <- ahrf_2019_2023 %>% 
+  filter(county_name == "Knox")
+
+lincoln <- ahrf_2019_2023 %>% 
+  filter(county_name == "Lincoln")
+
+oxford <- ahrf_2019_2023 %>% 
+  filter(county_name == "Oxford")
+
+penobscot <- ahrf_2019_2023 %>% 
+  filter(county_name == "Penobscot")
+
+piscataquis <- ahrf_2019_2023 %>% 
+  filter(county_name == "Piscataquis")
+
+sagadahoc <- ahrf_2019_2023 %>% 
+  filter(county_name == "Sagadahoc")
+
+somerset  <- ahrf_2019_2023 %>% 
+  filter(county_name == "Somerset")
+
+waldo <- ahrf_2019_2023 %>% 
+  filter(county_name == "Waldo")
+
+washington <- ahrf_2019_2023 %>% 
+  filter(county_name == "Washington")
+
+york <- ahrf_2019_2023 %>% 
+  filter(county_name == "York")
+```
+
+```{r}
+unite(hpsa_areas, hpsa_pc, c(hpsa_prim_care_23, hpsa_prim_care_22, hpsa_prim_care_21, hpsa_prim_care_20, hpsa_prim_care_19, hpsa_prim_care_18, hpsa_prim_care_17, hpsa_prim_care_16, hpsa_prim_care_15, hpsa_prim_care_10))
 ```
 
 
