@@ -21,7 +21,8 @@ ahrf_2022_2023 <- read.csv("/cloud/project/data/ahrf_2022_2023_maine.csv")
 # Initial Exploration
 
 ```{r}
-
+hpsa_areas <- ahrf_2019_2023 %>% 
+  select()
 ```
 
 
