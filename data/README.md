@@ -1,6 +1,6 @@
 # data
 
-This dataset was compiled using the Area Health Resource Files data for 2019-2020, 2020-2021, 2021-2022, and 2022-2023. After selecting the relevant information, the compiled dataset has 357 columns and 64 rows. 
+This dataset was compiled using the Area Health Resource Files data for 2019-2020, 2020-2021, 2021-2022, and 2022-2023. After selecting the relevant information, the compiled dataset has 357 columns and 64 rows. For supplementary data, I may use the original data files, labeled `ahrf_2019_2020_maine.csv`, `ahrf_2020_2021_maine.csv`, `ahrf_2021_2022_maine.csv`, and `ahrf_2022_2023_maine.csv`. Information about these files and the variables can be found in the hpsa_provided_documentation folder. 
 
 ## ahrf_2019_2023
 
