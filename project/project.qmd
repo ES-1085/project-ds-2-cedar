@@ -1,0 +1,32 @@
+
+
+# Set up Data
+
+```{r load-packages}
+library(gtable)
+library(htmltools)
+library(lubridate)
+library(RColorBrewer)
+library(tidymodels)
+library(tidyverse)
+```
+
+```{r load-data}
+ahrf_2019_2020 <- read.csv("/cloud/project/data/ahrf_2019_2020_maine.csv")
+ahrf_2020_2021 <- read.csv("/cloud/project/data/ahrf_2020_2021_maine.csv")
+ahrf_2021_2022 <- read.csv("/cloud/project/data/ahrf_2021_2022_maine.csv")
+ahrf_2022_2023 <- read.csv("/cloud/project/data/ahrf_2022_2023_maine.csv")
+```
+
+# Initial Exploration
+
+```{r}
+
+```
+
+
+
+
+# Analysis
+
+#Conclusion
