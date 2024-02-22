@@ -2,9 +2,11 @@
 
 # Set up Data
 
-```{r load-packages}
+```{r load-packages, warning = FALSE}
 library(gtable)
+library(ggridges)
 library(htmltools)
+library(knitr)
 library(lubridate)
 library(RColorBrewer)
 library(tidymodels)
@@ -16,9 +18,9 @@ ahrf_2019_2020 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2019_2020_
 ahrf_2020_2021 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2020_2021_maine.csv")
 ahrf_2021_2022 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2021_2022_maine.csv")
 ahrf_2022_2023 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2022_2023_maine.csv")
+ahrf_2019_2023 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2019_2023.csv")
 ```
 
-# Initial Exploration
 
 ```{r data-subsets-hpsa-and-county}
 hpsa_areas <- ahrf_2019_2023 %>% 
@@ -82,13 +84,56 @@ york <- ahrf_2019_2023 %>%
   filter(county_name == "York")
 ```
 
-```{r}
-unite(hpsa_areas, hpsa_pc, c(hpsa_prim_care_23, hpsa_prim_care_22, hpsa_prim_care_21, hpsa_prim_care_20, hpsa_prim_care_19, hpsa_prim_care_18, hpsa_prim_care_17, hpsa_prim_care_16, hpsa_prim_care_15, hpsa_prim_care_10))
+```{r hpsa-areas-data-clean-up}
+hpsa_pc <- hpsa_primary_care %>%
+  select(-year) %>%
+  pivot_longer(starts_with("hpsa_prim_care"), names_to = "data_year", values_to = "hpsa_pc_score", names_prefix = "hpsa_prim_care_") %>% 
+  mutate(data_year = as.numeric(data_year) + 2000) %>% 
+  drop_na(hpsa_pc_score) %>% 
+  distinct(county_name, data_year, .keep_all = TRUE)
+
+hpsa_dental <- hpsa_dental_care %>% 
+  select(-year) %>% 
+  pivot_longer(starts_with("hpsa_dent_"), names_to = "data_year", values_to = "hpsa_dental_score", names_prefix = "hpsa_dent_") %>% 
+  mutate(data_year = as.numeric(data_year) + 2000) %>% 
+  drop_na(hpsa_dental_score) %>% 
+  distinct(county_name, data_year, .keep_all = TRUE)
+
+hpsa_mh <- hpsa_mh_care %>% 
+  select(-year) %>% 
+  pivot_longer(starts_with("hpsa_mentl_hlth"), names_to = "data_year", values_to = "hpsa_mh_score", names_prefix = "hpsa_mentl_hlth_") %>% 
+  mutate(data_year = as.numeric(data_year) + 2000) %>% 
+  drop_na(hpsa_mh_score) %>% 
+  distinct(county_name, data_year, .keep_all = TRUE)
+```
+
+```{r maine-population}
+maine_pop <- ahrf_2022_2023 %>% 
+  select(cnty_name, cens_popn_20, cens_popn_10)
+```
+
+```{r hpsa-and-pop}
+hpsa_pc_pop <- hpsa_pc %>% 
+  full_join(maine_pop, join_by(county_name == cnty_name))
+
+hpsa_dental_pop <- hpsa_dental %>% 
+   full_join(maine_pop, join_by(county_name == cnty_name))
+
+hpsa_mh_pop <- hpsa_mh %>% 
+   full_join(maine_pop, join_by(county_name == cnty_name))
 ```
 
 
+# Initial Exploration
+
+```{r}
+hpsa_pc %>% 
+  ggplot(aes(x = data_year, y = hpsa_pc_score)) +
+  geom_line(color = "#00C377") +
+  facet_wrap(~ county_name)
+```
 
 
 # Analysis
 
-#Conclusion
+# Conclusion
