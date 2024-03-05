@@ -105,11 +105,16 @@ hpsa_mh <- hpsa_mh_care %>%
   mutate(data_year = as.numeric(data_year) + 2000) %>% 
   drop_na(hpsa_mh_score) %>% 
   distinct(county_name, data_year, .keep_all = TRUE)
+
+# hpsa_all_scores <- hpsa_pc %>%
+#   bind_cols(hpsa_dental) %>% 
+#   full_join(x = hpsa_all_scores, y = hpsa_mh_care, join_by("county_name" == "county_name...1"))
+
 ```
 
 ```{r hpsa-pc-provider-counts, warning = FALSE, echo = FALSE, message = FALSE}
-prelim_hpsa_pc_provider_counts <- ahrf_2019_2023 %>%
-  select(county_name, phys_nf_prim_care_pc_exc_rsdt_21, phys_nf_prim_care_pc_exc_rsdt_20, phys_nf_prim_care_pc_exc_rsdt_19, phys_nf_prim_care_pc_exc_rsdt_18,	phys_nf_prim_care_pc_exc_rsdt_17,	phys_nf_prim_care_pc_exc_rsdt_16,	phys_nf_prim_care_pc_exc_rsdt_15,	phys_nf_prim_care_pc_exc_rsdt_14,	phys_nf_prim_care_pc_exc_rsdt_13,	phys_nf_prim_care_pc_exc_rsdt_12,	phys_nf_prim_care_pc_exc_rsdt_11,	phys_nf_prim_care_pc_exc_rsdt_10, md_nf_prim_care_pc_excl_rsdnt_21,	md_nf_prim_care_pc_excl_rsdnt_20,	md_nf_prim_care_pc_excl_rsdnt_19,	md_nf_prim_care_pc_excl_rsdnt_18,	md_nf_prim_care_pc_excl_rsdnt_17,	md_nf_prim_care_pc_excl_rsdnt_16,	md_nf_prim_care_pc_excl_rsdnt_15,	md_nf_prim_care_pc_excl_rsdnt_14,	md_nf_prim_care_pc_excl_rsdnt_13,	md_nf_prim_care_pc_excl_rsdnt_12,	md_nf_prim_care_pc_excl_rsdnt_11,	md_nf_prim_care_pc_excl_rsdnt_10, do_nf_prim_care_pc_excl_rsdnt_21,	do_nf_prim_care_pc_excl_rsdnt_20,	do_nf_prim_care_pc_excl_rsdnt_19,	do_nf_prim_care_pc_excl_rsdnt_18, do_nf_prim_care_pc_excl_rsdnt_17,	do_nf_prim_care_pc_excl_rsdnt_16,	do_nf_prim_care_pc_excl_rsdnt_15,	do_nf_prim_care_pc_excl_rsdnt_14,	do_nf_prim_care_pc_excl_rsdnt_13,	do_nf_prim_care_pc_excl_rsdnt_12,	do_nf_prim_care_pc_excl_rsdnt_11,	do_nf_prim_care_pc_excl_rsdnt_10) %>%
+prelim_hpsa_pc_provider_counts <- ahrf_with_census %>%
+  select(county_name, cens_popn_20, cens_popn_10, phys_nf_prim_care_pc_exc_rsdt_21, phys_nf_prim_care_pc_exc_rsdt_20, phys_nf_prim_care_pc_exc_rsdt_19, phys_nf_prim_care_pc_exc_rsdt_18,	phys_nf_prim_care_pc_exc_rsdt_17,	phys_nf_prim_care_pc_exc_rsdt_16,	phys_nf_prim_care_pc_exc_rsdt_15,	phys_nf_prim_care_pc_exc_rsdt_14,	phys_nf_prim_care_pc_exc_rsdt_13,	phys_nf_prim_care_pc_exc_rsdt_12,	phys_nf_prim_care_pc_exc_rsdt_11,	phys_nf_prim_care_pc_exc_rsdt_10, md_nf_prim_care_pc_excl_rsdnt_21,	md_nf_prim_care_pc_excl_rsdnt_20,	md_nf_prim_care_pc_excl_rsdnt_19,	md_nf_prim_care_pc_excl_rsdnt_18,	md_nf_prim_care_pc_excl_rsdnt_17,	md_nf_prim_care_pc_excl_rsdnt_16,	md_nf_prim_care_pc_excl_rsdnt_15,	md_nf_prim_care_pc_excl_rsdnt_14,	md_nf_prim_care_pc_excl_rsdnt_13,	md_nf_prim_care_pc_excl_rsdnt_12,	md_nf_prim_care_pc_excl_rsdnt_11,	md_nf_prim_care_pc_excl_rsdnt_10, do_nf_prim_care_pc_excl_rsdnt_21,	do_nf_prim_care_pc_excl_rsdnt_20,	do_nf_prim_care_pc_excl_rsdnt_19,	do_nf_prim_care_pc_excl_rsdnt_18, do_nf_prim_care_pc_excl_rsdnt_17,	do_nf_prim_care_pc_excl_rsdnt_16,	do_nf_prim_care_pc_excl_rsdnt_15,	do_nf_prim_care_pc_excl_rsdnt_14,	do_nf_prim_care_pc_excl_rsdnt_13,	do_nf_prim_care_pc_excl_rsdnt_12,	do_nf_prim_care_pc_excl_rsdnt_11,	do_nf_prim_care_pc_excl_rsdnt_10) %>%
   pivot_longer(starts_with("phys_nf_prim_care_pc_exc_rsdt"), names_to = "pc_physician_count_year", values_to = "pc_physician_count", names_prefix = "phys_nf_prim_care_pc_exc_rsdt_") %>%
   pivot_longer(starts_with("md_nf_prim_care_pc_excl_rsdnt"), names_to = "md_pc_count_year", values_to = "md_pc_count", names_prefix = "md_nf_prim_care_pc_excl_rsdnt_") %>%
   pivot_longer(starts_with("do_nf_prim_care_pc_excl_rsdnt"), names_to = "do_pc_count_year", values_to = "do_pc_count", names_prefix = ("do_nf_prim_care_pc_excl_rsdnt_")) %>%
@@ -119,7 +124,7 @@ prelim_hpsa_pc_provider_counts <- ahrf_2019_2023 %>%
   distinct(county_name, pc_physician_count_year, pc_physician_count, md_pc_count_year, md_pc_count, do_pc_count_year, do_pc_count, .keep_all = TRUE)
 
 hpsa_pc_all <- prelim_hpsa_pc_provider_counts %>% 
-  select(county_name, pc_physician_count_year, pc_physician_count) %>% 
+  select(county_name, cens_popn_20, cens_popn_10, pc_physician_count_year, pc_physician_count) %>% 
   drop_na(pc_physician_count_year, pc_physician_count) %>% 
   distinct(county_name, pc_physician_count_year, .keep_all = TRUE)
 
@@ -136,7 +141,7 @@ hpsa_do_pc <- prelim_hpsa_pc_provider_counts %>%
 hpsa_pc_provider_counts <- hpsa_pc_all %>%
   bind_cols(hpsa_md_pc) %>% 
   bind_cols(hpsa_do_pc) %>% 
-  select(county_name...1, pc_physician_count_year, pc_physician_count, md_pc_count, do_pc_count) %>% 
+  select(county_name...1, cens_popn_20, cens_popn_10, pc_physician_count_year, pc_physician_count, md_pc_count, do_pc_count) %>% 
   rename(county_name = county_name...1,
          count_year = pc_physician_count_year)
 ```
@@ -157,17 +162,83 @@ hpsa_mh_pop <- hpsa_mh %>%
    full_join(maine_pop, join_by(county_name == cnty_name))
 ```
 
+```{r}
+ahrf_with_census <- ahrf_2019_2023 %>% 
+  left_join(y = maine_pop, by = c("county_name" = "cnty_name"))
+```
+
 
 # Initial Exploration
 
-```{r}
+```{r hpsa-score-change}
 hpsa_pc %>% 
   ggplot(aes(x = data_year, y = hpsa_pc_score)) +
   geom_line(color = "#00C377") +
+  facet_wrap(~ county_name)
+
+hpsa_dental %>% 
+  ggplot(aes(x = data_year, y = hpsa_dental_score)) +
+  geom_line(color = "#00C377") +
+  facet_wrap(~ county_name)
+
+hpsa_mh %>% 
+  ggplot(aes(x = data_year, y = hpsa_mh_score)) +
+  geom_line(color = "#00C377") +
+  facet_wrap(~ county_name)
+```
+
+```{r pop-change}
+maine_pop <- maine_pop %>%
+  mutate(pct_change = (cens_popn_20/lag(cens_popn_10) - 1) * 100)
+
+# why didn't this calculate a percent change for androscoggin county?
+# code from: "https://stackoverflow.com/questions/48196552/calculate-percentage-change-in-r-using-dplyr"
+```
+
+```{r econ-dep-type}
+
+```
+
+```{r primary-care-provider-counts}
+hpsa_pc_provider_counts %>% 
+  ggplot() +
+  geom_col(aes(x = count_year, y = pc_physician_count), fill = "#00608E") +
+  geom_col(aes(x = count_year, y = md_pc_count), fill = "#00AF8C") +
+  geom_col(aes(x = count_year, y = do_pc_count), fill = "#FDE333") +
+  facet_wrap(~ county_name)
+
+hpsa_pc_provider_counts %>% 
+  ggplot() +
+  geom_col(aes(x = count_year, y = pc_physician_count/cens_popn_20), fill = "#00608E") +
+  geom_col(aes(x = count_year, y = md_pc_count/cens_popn_20), fill = "#00AF8C") +
+  geom_col(aes(x = count_year, y = do_pc_count/cens_popn_20), fill = "#FDE333") +
+  facet_wrap(~ county_name)
+
+hpsa_pc_provider_counts %>% 
+  ggplot() +
+  geom_line(aes(x = count_year, y = pc_physician_count)) +
+  geom_line(aes(x = count_year, y = md_pc_count)) +
+  geom_line(aes(x = count_year, y = do_pc_count)) +
+  facet_wrap(~ county_name)
+
+hpsa_pc_provider_counts %>% 
+  ggplot() +
+  geom_line(aes(x = count_year, y = pc_physician_count/cens_popn_20)) +
+  geom_line(aes(x = count_year, y = md_pc_count/cens_popn_20)) +
+  geom_line(aes(x = count_year, y = do_pc_count/cens_popn_20)) +
   facet_wrap(~ county_name)
 ```
 
 
 # Analysis
+
+```{r provider-change-model}
+
+```
+
+```{r }
+
+```
+
 
 # Conclusion
