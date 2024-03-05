@@ -167,6 +167,13 @@ ahrf_with_census <- ahrf_2019_2023 %>%
   left_join(y = maine_pop, by = c("county_name" = "cnty_name"))
 ```
 
+```{r}
+county_pop <- ahrf_with_census %>% 
+  select(county_name, cens_popn_20, cens_popn_10) %>% 
+  pivot_longer(starts_with("cens_popn"), names_to = "census_year", values_to = "popn_count", names_prefix = "cens_popn_") %>% 
+  mutate(census_year = as.numeric(census_year) + 2000) %>% 
+  distinct(county_name, census_year, popn_count)
+```
 
 # Initial Exploration
 
@@ -191,12 +198,10 @@ hpsa_mh %>%
 maine_pop <- maine_pop %>%
   mutate(pct_change = (cens_popn_20/lag(cens_popn_10) - 1) * 100)
 
+maine_pop
+
 # why didn't this calculate a percent change for androscoggin county?
 # code from: "https://stackoverflow.com/questions/48196552/calculate-percentage-change-in-r-using-dplyr"
-```
-
-```{r econ-dep-type}
-
 ```
 
 ```{r primary-care-provider-counts}
@@ -228,6 +233,7 @@ hpsa_pc_provider_counts %>%
   geom_line(aes(x = count_year, y = do_pc_count/cens_popn_20)) +
   facet_wrap(~ county_name)
 ```
+
 
 
 # Analysis
