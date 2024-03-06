@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 # Load Packages & Data
@@ -373,4 +374,182 @@ hpsa_pc_provider_counts %>%
 ```
 
 
+=======
+
+
+# Set up Data
+
+```{r load-packages, warning = FALSE}
+library(gtable)
+library(ggridges)
+library(htmltools)
+library(knitr)
+library(lubridate)
+library(RColorBrewer)
+library(tidymodels)
+library(tidyverse)
+```
+
+```{r load-data}
+ahrf_2019_2020 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2019_2020_maine.csv")
+ahrf_2020_2021 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2020_2021_maine.csv")
+ahrf_2021_2022 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2021_2022_maine.csv")
+ahrf_2022_2023 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2022_2023_maine.csv")
+ahrf_2019_2023 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2019_2023.csv")
+```
+
+
+```{r data-subsets-hpsa-and-county}
+hpsa_areas <- ahrf_2019_2023 %>% 
+  select(year, county_name, hpsa_prim_care_23, hpsa_prim_care_22, hpsa_prim_care_21, hpsa_prim_care_20, hpsa_prim_care_19, hpsa_prim_care_18, hpsa_prim_care_17, hpsa_prim_care_16, hpsa_prim_care_15, hpsa_prim_care_10, hpsa_dent_23,hpsa_dent_22, hpsa_dent_21, hpsa_dent_20, hpsa_dent_19, hpsa_dent_18, hpsa_dent_17, hpsa_dent_16, hpsa_dent_15, hpsa_dent_10, hpsa_mentl_hlth_23, hpsa_mentl_hlth_22, hpsa_mentl_hlth_21, hpsa_mentl_hlth_20, hpsa_mentl_hlth_19, hpsa_mentl_hlth_18, hpsa_mentl_hlth_17, hpsa_mentl_hlth_16, hpsa_mentl_hlth_15, hpsa_mentl_hlth_10)
+
+hpsa_primary_care <- ahrf_2019_2023 %>% 
+  select(year, county_name, hpsa_prim_care_23, hpsa_prim_care_22, hpsa_prim_care_21, hpsa_prim_care_20, hpsa_prim_care_19, hpsa_prim_care_18, hpsa_prim_care_17, hpsa_prim_care_16, hpsa_prim_care_15, hpsa_prim_care_10)
+
+hpsa_dental_care <- ahrf_2019_2023 %>% 
+  select(year, county_name, hpsa_dent_23,hpsa_dent_22, hpsa_dent_21, hpsa_dent_20, hpsa_dent_19, hpsa_dent_18, hpsa_dent_17, hpsa_dent_16, hpsa_dent_15, hpsa_dent_10)
+
+hpsa_mh_care <- ahrf_2019_2023 %>% 
+  select(year, county_name, hpsa_mentl_hlth_23, hpsa_mentl_hlth_22, hpsa_mentl_hlth_21, hpsa_mentl_hlth_20, hpsa_mentl_hlth_19, hpsa_mentl_hlth_18, hpsa_mentl_hlth_17, hpsa_mentl_hlth_16, hpsa_mentl_hlth_15, hpsa_mentl_hlth_10)
+
+androscoggin <- ahrf_2019_2023 %>% 
+  filter(county_name == "Androscoggin")
+
+aroostook <- ahrf_2019_2023 %>% 
+  filter(county_name == "Aroostook")
+
+cumberland <- ahrf_2019_2023 %>% 
+  filter(county_name == "Cumberland")
+
+franklin <- ahrf_2019_2023 %>% 
+  filter(county_name == "Franklin")
+
+hancock <- ahrf_2019_2023 %>% 
+  filter(county_name == "Hancock")
+
+kennebec <- ahrf_2019_2023 %>% 
+  filter(county_name == "Kennebec")
+
+knox <- ahrf_2019_2023 %>% 
+  filter(county_name == "Knox")
+
+lincoln <- ahrf_2019_2023 %>% 
+  filter(county_name == "Lincoln")
+
+oxford <- ahrf_2019_2023 %>% 
+  filter(county_name == "Oxford")
+
+penobscot <- ahrf_2019_2023 %>% 
+  filter(county_name == "Penobscot")
+
+piscataquis <- ahrf_2019_2023 %>% 
+  filter(county_name == "Piscataquis")
+
+sagadahoc <- ahrf_2019_2023 %>% 
+  filter(county_name == "Sagadahoc")
+
+somerset  <- ahrf_2019_2023 %>% 
+  filter(county_name == "Somerset")
+
+waldo <- ahrf_2019_2023 %>% 
+  filter(county_name == "Waldo")
+
+washington <- ahrf_2019_2023 %>% 
+  filter(county_name == "Washington")
+
+york <- ahrf_2019_2023 %>% 
+  filter(county_name == "York")
+```
+
+```{r hpsa-areas-data-clean-up}
+hpsa_pc <- hpsa_primary_care %>%
+  select(-year) %>%
+  pivot_longer(starts_with("hpsa_prim_care"), names_to = "data_year", values_to = "hpsa_pc_score", names_prefix = "hpsa_prim_care_") %>% 
+  mutate(data_year = as.numeric(data_year) + 2000) %>% 
+  drop_na(hpsa_pc_score) %>% 
+  distinct(county_name, data_year, .keep_all = TRUE)
+
+hpsa_dental <- hpsa_dental_care %>% 
+  select(-year) %>% 
+  pivot_longer(starts_with("hpsa_dent_"), names_to = "data_year", values_to = "hpsa_dental_score", names_prefix = "hpsa_dent_") %>% 
+  mutate(data_year = as.numeric(data_year) + 2000) %>% 
+  drop_na(hpsa_dental_score) %>% 
+  distinct(county_name, data_year, .keep_all = TRUE)
+
+hpsa_mh <- hpsa_mh_care %>% 
+  select(-year) %>% 
+  pivot_longer(starts_with("hpsa_mentl_hlth"), names_to = "data_year", values_to = "hpsa_mh_score", names_prefix = "hpsa_mentl_hlth_") %>% 
+  mutate(data_year = as.numeric(data_year) + 2000) %>% 
+  drop_na(hpsa_mh_score) %>% 
+  distinct(county_name, data_year, .keep_all = TRUE)
+```
+
+```{r}
+prelim_hpsa_pc_provider_counts <- ahrf_2019_2023 %>%
+  select(county_name, phys_nf_prim_care_pc_exc_rsdt_21, phys_nf_prim_care_pc_exc_rsdt_20, phys_nf_prim_care_pc_exc_rsdt_19, phys_nf_prim_care_pc_exc_rsdt_18,	phys_nf_prim_care_pc_exc_rsdt_17,	phys_nf_prim_care_pc_exc_rsdt_16,	phys_nf_prim_care_pc_exc_rsdt_15,	phys_nf_prim_care_pc_exc_rsdt_14,	phys_nf_prim_care_pc_exc_rsdt_13,	phys_nf_prim_care_pc_exc_rsdt_12,	phys_nf_prim_care_pc_exc_rsdt_11,	phys_nf_prim_care_pc_exc_rsdt_10, md_nf_prim_care_pc_excl_rsdnt_21,	md_nf_prim_care_pc_excl_rsdnt_20,	md_nf_prim_care_pc_excl_rsdnt_19,	md_nf_prim_care_pc_excl_rsdnt_18,	md_nf_prim_care_pc_excl_rsdnt_17,	md_nf_prim_care_pc_excl_rsdnt_16,	md_nf_prim_care_pc_excl_rsdnt_15,	md_nf_prim_care_pc_excl_rsdnt_14,	md_nf_prim_care_pc_excl_rsdnt_13,	md_nf_prim_care_pc_excl_rsdnt_12,	md_nf_prim_care_pc_excl_rsdnt_11,	md_nf_prim_care_pc_excl_rsdnt_10, do_nf_prim_care_pc_excl_rsdnt_21,	do_nf_prim_care_pc_excl_rsdnt_20,	do_nf_prim_care_pc_excl_rsdnt_19,	do_nf_prim_care_pc_excl_rsdnt_18, do_nf_prim_care_pc_excl_rsdnt_17,	do_nf_prim_care_pc_excl_rsdnt_16,	do_nf_prim_care_pc_excl_rsdnt_15,	do_nf_prim_care_pc_excl_rsdnt_14,	do_nf_prim_care_pc_excl_rsdnt_13,	do_nf_prim_care_pc_excl_rsdnt_12,	do_nf_prim_care_pc_excl_rsdnt_11,	do_nf_prim_care_pc_excl_rsdnt_10) %>%
+  pivot_longer(starts_with("phys_nf_prim_care_pc_exc_rsdt"), names_to = "pc_physician_count_year", values_to = "pc_physician_count", names_prefix = "phys_nf_prim_care_pc_exc_rsdt_") %>%
+  pivot_longer(starts_with("md_nf_prim_care_pc_excl_rsdnt"), names_to = "md_pc_count_year", values_to = "md_pc_count", names_prefix = "md_nf_prim_care_pc_excl_rsdnt_") %>%
+  pivot_longer(starts_with("do_nf_prim_care_pc_excl_rsdnt"), names_to = "do_pc_count_year", values_to = "do_pc_count", names_prefix = ("do_nf_prim_care_pc_excl_rsdnt_")) %>%
+  mutate(pc_physician_count_year = as.numeric(pc_physician_count_year) + 2000) %>%
+  mutate(md_pc_count_year = as.numeric(md_pc_count_year) + 2000) %>%
+  mutate(do_pc_count_year = as.numeric(do_pc_count_year) + 2000) %>%
+  distinct(county_name, pc_physician_count_year, pc_physician_count, md_pc_count_year, md_pc_count, do_pc_count_year, do_pc_count, .keep_all = TRUE)
+
+hpsa_pc_all <- prelim_hpsa_pc_provider_counts %>% 
+  select(county_name, pc_physician_count_year, pc_physician_count) %>% 
+  drop_na(pc_physician_count_year, pc_physician_count) %>% 
+  distinct(county_name, pc_physician_count_year, .keep_all = TRUE)
+
+hpsa_md_pc <- prelim_hpsa_pc_provider_counts %>% 
+  select(county_name, md_pc_count_year, md_pc_count) %>% 
+  drop_na(md_pc_count_year, md_pc_count) %>% 
+  distinct(county_name, md_pc_count_year, .keep_all = TRUE)  
+
+hpsa_do_pc <- prelim_hpsa_pc_provider_counts %>% 
+  select(county_name, do_pc_count_year, do_pc_count) %>% 
+  drop_na(do_pc_count_year, do_pc_count) %>% 
+  distinct(county_name, do_pc_count_year, .keep_all = TRUE)   
+
+hpsa_pc_provider_counts <- hpsa_pc_all %>%
+  bind_cols(hpsa_md_pc) %>% 
+  bind_cols(hpsa_do_pc) %>% 
+  select(county_name...1, pc_physician_count_year, pc_physician_count, md_pc_count, do_pc_count) %>% 
+  rename(county_name = county_name...1,
+         count_year = pc_physician_count_year)
+
+  
+hpsa_pc_provider_counts
+```
+
+
+```{r maine-population}
+maine_pop <- ahrf_2022_2023 %>% 
+  select(cnty_name, cens_popn_20, cens_popn_10)
+```
+
+```{r hpsa-and-pop}
+hpsa_pc_pop <- hpsa_pc %>% 
+  full_join(maine_pop, join_by(county_name == cnty_name))
+
+hpsa_dental_pop <- hpsa_dental %>% 
+   full_join(maine_pop, join_by(county_name == cnty_name))
+
+hpsa_mh_pop <- hpsa_mh %>% 
+   full_join(maine_pop, join_by(county_name == cnty_name))
+```
+
+
+# Initial Exploration
+
+```{r}
+hpsa_pc %>% 
+  ggplot(aes(x = data_year, y = hpsa_pc_score)) +
+  geom_line(color = "#00C377") +
+  facet_wrap(~ county_name)
+```
+
+
+# Analysis
+
+>>>>>>> 85ad4e25d88af68d637d320b9b1d34fd89ea85df
 # Conclusion
