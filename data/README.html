@@ -356,8 +356,14 @@ display: none;
 <h1>data</h1>
 <p>This dataset was compiled using the Area Health Resource Files data
 for 2019-2020, 2020-2021, 2021-2022, and 2022-2023. After selecting the
-relevant information, the compiled dataset has 357 columns and 64
-rows.</p>
+relevant information, the compiled dataset has 357 columns and 64 rows.
+For supplementary data, I may use the original data files, labeled
+<code>ahrf_2019_2020_maine.csv</code>,
+<code>ahrf_2020_2021_maine.csv</code>,
+<code>ahrf_2021_2022_maine.csv</code>, and
+<code>ahrf_2022_2023_maine.csv</code>. Information about these files and
+the variables can be found in the hpsa_provided_documentation
+folder.</p>
 <div id="ahrf_2019_2023" class="section level2">
 <h2>ahrf_2019_2023</h2>
 <p>Specific data collection and perimeters can be found in the
@@ -365,7 +371,7 @@ rows.</p>
 <ul>
 <li><p><code>year</code>: year the data was collected</p></li>
 <li><p><code>county_name</code>: county name</p></li>
-<li><p><code>fips_county</code>: FIPS = Fedaral Information Processing
+<li><p><code>fips_county</code>: FIPS = Federal Information Processing
 Standards. Has unique two number state codes and three number county
 codes. Because I am only including information from Maine, I’ve chosen
 to only include the FIPS county code.</p></li>
@@ -373,7 +379,7 @@ to only include the FIPS county code.</p></li>
 includes metropolitan and micropolitan areas. A metropolitan statistical
 area includes at least one urban area with a population greater than
 50,000 and with significant social and economic integration in the
-surrounding area. Micropolican statistical areas include an urban
+surrounding area. Micropolitan statistical areas include an urban
 cluster with a population of at least 10,000 but less than 50,000. The
 surrounding area has significant social and economic integration. This
 dataset defined metro- and micropolitan areas for the whole
@@ -384,7 +390,7 @@ statistical areas in a county</p></li>
 area (0), a metropolitan statistical area (1), or a micropolitan
 statistical area (2)</p></li>
 <li><p><code>cbsa_cnty_stats_20</code>: counties designated as metro- or
-micropolican statistal areas are categorized as central or outlying.
+micropolitan statistical areas are categorized as central or outlying.
 Central counties are where at least 50 percent of the population lives
 in an urban area of at least 10,000 or where at least 5,000 people live
 in an urban area with a population of 10,000 or more. Outlying counties
@@ -513,7 +519,7 @@ county must meet the following criteria to be considered as having a
 shortage of primary care providers: 1) the area is considered a
 “rational area” (the HRSA does not share a definition) for primary
 medical care services to be delivered; 2) the area either a) has at
-least one full-time-equivalent primary care physician for every 3,5000
+least one full-time-equivalent primary care physician for every 3,500
 people or b) has at least one full-time-equivalent primary care
 physician for between 3,000 and 3,500 but demonstrates either an
 unusually high need for primary care providers or the existing primary
