@@ -107,7 +107,7 @@ hospitals <- ahrf_2022_2023 %>%
 
 ```{r hospital-care-type}
 hospital_care_types <- ahrf_2022_2023 %>% 
-  select(cnty_name, stgh_gen_med_surg_care_adult_21, stgh_gen_med_surg_care_ped_21, stgh_obstetrc_care_21, stgh_neonat_icu_21, stgh_amb_svc_21, stgh_air_amb_svc_21, stgh_birth_postprtm_rm_21, stgh_case_mgmt_21, stnglth_case_mgmt_21, stgh_chemthpy_21, stgh_criss_prevn_21, stgh_ed_21, stgh_off_camps_ed_21, stgh_ped_ed_21, stgh_cert_tram_ctr_21, stgh_comn_hlth_eductn_21, stgh_oncolgy_svc_21, stgh_prim_care_deprtmnt_21, stgh_psych_conslttn_lisn_svc_21, stnglth_psych_conslt_svc_21, stgh_psych_ped_care_svc_21, stgh_psych_gertrc_svc_21, stgh_psych_eductnl_svc_21, stgh_psych_outpt_svc_21, stgh_psych_intensv_outpt_svc_21, sth_socl_comn_psych_svc_21, sth_natal_postprtm_psych_svc_21, stgh_psych_php_adult_21, stgh_psych_php_ped_21, stgh_psych_rsdntl_tx_adult_21, stgh_psych_rsdntl_tx_ped_21, stgh_rural_hlth_clincs_21, stgh_psych_care_21, stgh_substnc_use_inpat_care_21, stgh_substnc_use_ped_svc_21, stgh_substnc_use_outpt_svc_21, stgh_substnc_use_php_21, sth_med_assistd_opid_tx_21, sth_med_assistd_oth_subst_tx_21)
+  select(cnty_name, stgh_gen_med_surg_care_adult_21, stgh_gen_med_surg_care_ped_21, stgh_obstetrc_care_21, stgh_neonat_icu_21, stgh_amb_svc_21, stgh_air_amb_svc_21, stgh_birth_postprtm_rm_21, stgh_case_mgmt_21, stnglth_case_mgmt_21, stgh_chemthpy_21, stgh_criss_prevn_21, stgh_ed_21, stgh_off_camps_ed_21, stgh_ped_ed_21, stgh_cert_tram_ctr_21, stgh_comn_hlth_eductn_21, stgh_oncolgy_svc_21, stgh_prim_care_deprtmnt_21, stgh_psych_conslttn_lisn_svc_21, stnglth_psych_conslt_svc_21, stgh_psych_ped_care_svc_21, stgh_psych_gertrc_svc_21, stgh_psych_eductnl_svc_21, stgh_psych_outpt_svc_21, stgh_psych_intensv_outpt_svc_21, sth_socl_comn_psych_svc_21, sth_natal_postprtm_psych_svc_21, stgh_psych_php_adult_21, stgh_psych_php_ped_21, stgh_psych_rsdntl_tx_adult_21, stgh_psych_rsdntl_tx_ped_21, stgh_rural_hlth_clincs_21, stgh_psych_care_21, stgh_substnc_use_inpat_care_21, stgh_substnc_use_ped_svc_21, stgh_substnc_use_outpt_svc_21, stgh_substnc_use_php_21, sth_med_assistd_opid_tx_21, sth_med_assistd_oth_subst_tx_21, rural_hlth_clincs_22, rural_hlth_clincs_21, comn_mentl_hlth_ctr_22, comn_mentl_hlth_ctr_21, fedly_qualfd_hlth_ctr_22, fedly_qualfd_hlth_ctr_21, comn_hlth_ctr_grants_only_23, comn_hlth_ctr_grants_only_22, cens_popn_20, cens_popn_10, popn_est_22, popn_est_21, popn_21, popn_20, )
 ```
 
 ```{r facility-types}
@@ -491,3 +491,171 @@ all_physicians <- md_counts %>%
          count_year = count_year...2)
 ```
 
+```{r hosp-data}
+prelim_hosp_data <- ahrf_2022_2023 %>% 
+  select(cnty_name, hosp_adm_21, hosp_adm_20, stgh_hosp_adm_21, stgh_hosp_adm_20, stnglth_hosp_adm_21, stnglth_hosp_adm_20, sth_comn_hosp_adm_21, sth_comn_hosp_adm_20, hosp_21, hosp_20, stgh_21, stgh_20, lth_21, lth_20, sth_psych_21, sth_psych_20, sth_child_med_21, sth_child_med_20, sth_child_psych_21, sth_child_psych_20, lth_psych_21, lth_psych_20, lth_child_psych_21, lth_child_psych_20, sth_comn_21, sth_comn_20, vetn_hosp_21, vetn_hosp_20, stgh_critcl_access_21, stgh_critcl_access_20, sole_comn_provdrs_21, sole_comn_provdrs_20)
+```
+
+```{r hosp-adm-data-pivots, warning = FALSE, message = FALSE}
+hosp_adm <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("hosp_adm"), names_to = "hosp_adm_year", values_to = "hosp_adm_count", names_prefix = "hosp_adm_") %>% 
+  mutate(hosp_adm_year = as.numeric(hosp_adm_year) + 2000) %>% 
+  select(cnty_name, hosp_adm_year, hosp_adm_count) %>% 
+  drop_na(hosp_adm_year, hosp_adm_count) %>% 
+  distinct(cnty_name, hosp_adm_year, .keep_all = TRUE)
+
+stgh_hosp_adm <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("stgh_hosp_adm"), names_to = "stgh_hosp_year", values_to = "stgh_hosp_count", names_prefix = "stgh_hosp_adm_") %>% 
+  mutate(stgh_hosp_year = as.numeric(stgh_hosp_year) + 2000) %>% 
+  select(cnty_name, stgh_hosp_year, stgh_hosp_count) %>% 
+  drop_na(stgh_hosp_year, stgh_hosp_count) %>% 
+  distinct(cnty_name, stgh_hosp_year, .keep_all = TRUE)
+
+stnglth_hosp_adm <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("stnglth_hosp_adm"), names_to = "stnglth_hosp_year", values_to = "stnglth_hosp_count", names_prefix = "stnglth_hosp_adm_") %>% 
+  mutate(stnglth_hosp_year = as.numeric(stnglth_hosp_year) + 2000) %>% 
+  select(cnty_name, stnglth_hosp_year, stnglth_hosp_count) %>% 
+  drop_na(stnglth_hosp_year, stnglth_hosp_count) %>% 
+  distinct(cnty_name, stnglth_hosp_year, .keep_all = TRUE)
+
+sth_comn_hosp_adm <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("sth_comn_hosp_adm"), names_to = "sth_comn_hosp_year", values_to = "sth_comn_hosp_count", names_prefix = "sth_comn_hosp_adm_") %>% 
+  mutate(sth_comn_hosp_year = as.numeric(sth_comn_hosp_year) + 2000) %>% 
+  select(cnty_name, sth_comn_hosp_year, sth_comn_hosp_count) %>% 
+  drop_na(sth_comn_hosp_year, sth_comn_hosp_count) %>% 
+  distinct(cnty_name, sth_comn_hosp_year, .keep_all = TRUE)
+```
+
+```{r hosp-data-pivots, warning = FALSE, message = FALSE}
+hosp <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("hosp"), names_to = "hosp_year", values_to = "hosp_count", names_prefix = "hosp_") %>% 
+  mutate(hosp_year = as.numeric(hosp_year) + 2000) %>% 
+  select(cnty_name, hosp_year, hosp_count) %>% 
+  drop_na(hosp_year, hosp_count) %>% 
+  distinct(cnty_name, hosp_year, hosp_count, .keep_all = TRUE)
+
+stgh <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("stgh"), names_to = "stgh_year", values_to = "stgh_count", names_prefix = "stgh_") %>% 
+  mutate(stgh_year = as.numeric(stgh_year) + 2000) %>% 
+  select(cnty_name, stgh_year, stgh_count) %>% 
+  drop_na(stgh_year, stgh_count) %>% 
+  distinct(cnty_name, stgh_year, stgh_count, .keep_all = TRUE)
+
+lth <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("lth"), names_to = "lth_year", values_to = "lth_count", names_prefix = "lth_") %>% 
+  mutate(lth_year = as.numeric(lth_year) + 2000) %>% 
+  select(cnty_name, lth_year, lth_count) %>% 
+  drop_na(lth_year, lth_count) %>% 
+  distinct(cnty_name, lth_year, lth_count, .keep_all = TRUE)
+
+sth_psych <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("sth_psych"), names_to = "sth_psych_year", values_to = "sth_psych_count", names_prefix = "sth_psych_") %>%
+  mutate(sth_psych_year = as.numeric(sth_psych_year) + 2000) %>% 
+  select(cnty_name, sth_psych_year, sth_psych_count) %>% 
+  drop_na(sth_psych_year, sth_psych_count) %>% 
+  distinct(cnty_name, sth_psych_year, sth_psych_count, .keep_all = TRUE)
+
+sth_child_med <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("sth_child_med"), names_to = "sth_child_med_year", values_to = "sth_child_med_count", names_prefix = "sth_child_med_") %>% 
+  mutate(sth_child_med_year = as.numeric(sth_child_med_year) + 2000) %>% 
+  select(cnty_name, sth_child_med_year, sth_child_med_count) %>% 
+  drop_na(sth_child_med_year, sth_child_med_count) %>% 
+  distinct(cnty_name, sth_child_med_year, sth_child_med_count, .keep_all = TRUE)
+
+sth_child_psych <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("sth_child_psych"), names_to = "sth_child_psych_year", values_to = "sth_child_psych_count", names_prefix = "sth_child_psych_") %>% 
+  mutate(sth_child_psych_year = as.numeric(sth_child_psych_year) + 2000) %>% 
+  select(cnty_name, sth_child_psych_year, sth_child_psych_count) %>% 
+  drop_na(sth_child_psych_year, sth_child_psych_count) %>% 
+  distinct(cnty_name, sth_child_psych_year, sth_child_psych_count, .keep_all = TRUE)
+
+lth_psych <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("lth_psych"), names_to = "lth_psych_year", values_to = "lth_psych_count", names_prefix = "lth_psych_") %>%
+  mutate(lth_psych_year = as.numeric(lth_psych_year) + 2000) %>%
+  select(cnty_name, lth_psych_year, lth_psych_count) %>% 
+  drop_na(lth_psych_year, lth_psych_count) %>% 
+  distinct(cnty_name, lth_psych_year, lth_psych_count, .keep_all = TRUE)
+
+lth_child_psych <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("lth_child_psych"), names_to = "lth_child_psych_year", values_to = "lth_child_psych_count", names_prefix = "lth_child_psych_") %>% 
+  mutate(lth_child_psych_year = as.numeric(lth_child_psych_year) + 2000) %>% 
+  select(cnty_name, lth_child_psych_year, lth_child_psych_count) %>% 
+  drop_na(lth_child_psych_year, lth_child_psych_count) %>% 
+  distinct(cnty_name, lth_child_psych_year, lth_child_psych_count, .keep_all = TRUE)
+
+sth_comn <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("sth_comn"), names_to = "sth_comn_year", values_to = "sth_comn_count", names_prefix = "sth_comn_") %>% 
+  mutate(sth_comn_year = as.numeric(sth_comn_year) + 2000) %>% 
+  select(cnty_name, sth_comn_year, sth_comn_count) %>% 
+  drop_na(sth_comn_year, sth_comn_count) %>% 
+  distinct(cnty_name, sth_comn_year, sth_comn_count, .keep_all = TRUE)
+
+vetn_hosp <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("vetn_hosp"), names_to = "vetn_hosp_year", values_to = "vetn_hosp_count", names_prefix = "vetn_hosp_") %>%
+  mutate(vetn_hosp_year = as.numeric(vetn_hosp_year) + 2000) %>% 
+  select(cnty_name, vetn_hosp_year, vetn_hosp_count) %>% 
+  drop_na(vetn_hosp_year, vetn_hosp_count) %>% 
+  distinct(cnty_name, vetn_hosp_year, vetn_hosp_count)
+
+stgh_critcl_access <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("stgh_critcl_access"), names_to = "stgh_critcl_access_year", values_to = "stgh_critcl_access_count", names_prefix = "stgh_critcl_access_") %>% 
+  mutate(stgh_critcl_access_year = as.numeric(stgh_critcl_access_year) + 2000) %>% 
+  select(cnty_name, stgh_critcl_access_year, stgh_critcl_access_count) %>% 
+  drop_na(stgh_critcl_access_year, stgh_critcl_access_count) %>% 
+  distinct(cnty_name, stgh_critcl_access_year, stgh_critcl_access_count, .keep_all = TRUE)
+
+sole_comn_provdrs <- prelim_hosp_data %>% 
+  pivot_longer(starts_with("sole_comn_provdrs"), names_to = "sole_comn_provdrs_year", values_to = "sole_comn_provdrs_count", names_prefix = "sole_comn_provdrs_") %>% 
+  mutate(sole_comn_provdrs_year = as.numeric(sole_comn_provdrs_year) + 2000) %>% 
+  select(cnty_name, sole_comn_provdrs_year, sole_comn_provdrs_count) %>% 
+  drop_na(sole_comn_provdrs_year, sole_comn_provdrs_count) %>% 
+  distinct(cnty_name, sole_comn_provdrs_year, sole_comn_provdrs_count)
+```
+
+```{r hosp-adm-data-bind, warning = FALSE, message = FALSE}
+hosp_adm_data <- hosp_adm %>% 
+  bind_cols(stgh_hosp_adm) %>% 
+  bind_cols(stnglth_hosp_adm) %>% 
+  bind_cols(sth_comn_hosp_adm) %>% 
+  select(cnty_name...1, hosp_adm_year, hosp_adm_count, stgh_hosp_count, stnglth_hosp_count, sth_comn_hosp_count) %>% 
+  rename(county_name = cnty_name...1,
+         count_year = hosp_adm_year)
+```
+
+```{r hosp-data-bind, warning = FALSE, message = FALSE}
+hosp_data <- hosp %>% 
+  bind_cols(stgh) %>% 
+  bind_cols(lth) %>% 
+  bind_cols(sth_psych) %>% 
+  bind_cols(sth_child_med) %>% 
+  bind_cols(sth_child_psych) %>% 
+  bind_cols(lth_psych) %>% 
+  bind_cols(lth_child_psych) %>% 
+  bind_cols(sth_comn) %>% 
+  bind_cols(vetn_hosp) %>% 
+  bind_cols(stgh_critcl_access) %>% 
+  bind_cols(sole_comn_provdrs) %>% 
+  select(cnty_name...1, hosp_year, hosp_count, stgh_count, lth_count, sth_psych_count, sth_child_med_count, sth_child_psych_count, lth_psych_count, lth_child_psych_count, sth_comn_count, vetn_hosp_count, stgh_critcl_access_count, sole_comn_provdrs_count) %>% 
+  rename(county_name = cnty_name...1, 
+         count_year = hosp_year)
+                     
+```
+
+
+```{r hosp-care-data}
+hosp_care_types <- ahrf_2022_2023 %>% 
+  select(cnty_name, stgh_gen_med_surg_care_adult_21, stgh_gen_med_surg_care_ped_21, stgh_obstetrc_care_21, stgh_neonat_icu_21, stgh_amb_svc_21, stgh_air_amb_svc_21, stgh_birth_postprtm_rm_21, stgh_case_mgmt_21, stnglth_case_mgmt_21, stgh_chemthpy_21, stgh_criss_prevn_21, stgh_ed_21, stgh_off_camps_ed_21, stgh_ped_ed_21, stgh_cert_tram_ctr_21, stgh_comn_hlth_eductn_21, stgh_oncolgy_svc_21, stgh_prim_care_deprtmnt_21, stgh_psych_conslttn_lisn_svc_21, stnglth_psych_conslt_svc_21, stgh_psych_ped_care_svc_21, stgh_psych_gertrc_svc_21, stgh_psych_eductnl_svc_21, stgh_psych_outpt_svc_21, stgh_psych_intensv_outpt_svc_21, sth_socl_comn_psych_svc_21, sth_natal_postprtm_psych_svc_21, stgh_psych_php_adult_21, stgh_psych_php_ped_21, stgh_psych_rsdntl_tx_adult_21, stgh_psych_rsdntl_tx_ped_21, stgh_rural_hlth_clincs_21, stgh_psych_care_21, stgh_substnc_use_inpat_care_21, stgh_substnc_use_ped_svc_21, stgh_substnc_use_outpt_svc_21, stgh_substnc_use_php_21, sth_med_assistd_opid_tx_21, sth_med_assistd_oth_subst_tx_21)
+```
+
+```{r}
+care_type_test <- hosp_care_types %>% 
+  pivot_longer(cols = c(stgh_gen_med_surg_care_adult_21, stgh_gen_med_surg_care_ped_21, stgh_obstetrc_care_21, stgh_neonat_icu_21, stgh_amb_svc_21, stgh_air_amb_svc_21, stgh_birth_postprtm_rm_21, stgh_case_mgmt_21, stnglth_case_mgmt_21, stgh_chemthpy_21, stgh_criss_prevn_21, stgh_ed_21, stgh_off_camps_ed_21, stgh_ped_ed_21, stgh_cert_tram_ctr_21, stgh_comn_hlth_eductn_21, stgh_oncolgy_svc_21, stgh_prim_care_deprtmnt_21, stgh_psych_conslttn_lisn_svc_21, stnglth_psych_conslt_svc_21, stgh_psych_ped_care_svc_21, stgh_psych_gertrc_svc_21, stgh_psych_eductnl_svc_21, stgh_psych_outpt_svc_21, stgh_psych_intensv_outpt_svc_21, sth_socl_comn_psych_svc_21, sth_natal_postprtm_psych_svc_21, stgh_psych_php_adult_21, stgh_psych_php_ped_21, stgh_psych_rsdntl_tx_adult_21, stgh_psych_rsdntl_tx_ped_21, stgh_rural_hlth_clincs_21, stgh_psych_care_21, stgh_substnc_use_inpat_care_21, stgh_substnc_use_ped_svc_21, stgh_substnc_use_outpt_svc_21, stgh_substnc_use_php_21, sth_med_assistd_opid_tx_21, sth_med_assistd_oth_subst_tx_21), names_to = c("hospital_type", "care_type", "year"), names_pattern =  "([stnglth]+)_(.*)_(.*)", values_to = "count")
+```
+
+
+
+
+
+```{r BROKEN-CODE-JAIL}
+
+```

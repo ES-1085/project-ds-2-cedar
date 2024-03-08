@@ -7,6 +7,7 @@ library(gtable)
 library(ggridges)
 library(htmltools)
 library(knitr)
+library(leaflet)
 library(lubridate)
 library(RColorBrewer)
 library(tidymodels)
@@ -37,15 +38,15 @@ hpsa_dental %>%
 
 hpsa_mh %>% 
   ggplot(aes(x = data_year, y = hpsa_mh_score)) +
-  geom_line(color = "#00C377") +
+  geom_line(color = "#00C377") + 
   facet_wrap(~ county_name)
 ```
 
-```{r pop-change}
-maine_pop <- maine_pop %>%
-  mutate(pct_change = (cens_popn_20/lag(cens_popn_10) - 1) * 100)
-
-maine_pop
+```{r BROKEN-CODE-JAIL-pop-change}
+# maine_pop <- maine_pop %>%
+#   mutate(pct_change = (cens_popn_20/lag(cens_popn_10) - 1) * 100)
+# 
+# maine_pop
 
 # why didn't this calculate a percent change for androscoggin county?
 # code from: "https://stackoverflow.com/questions/48196552/calculate-percentage-change-in-r-using-dplyr"
@@ -81,6 +82,27 @@ hpsa_pc_provider_counts %>%
   facet_wrap(~ county_name)
 ```
 
+```{r active-md-count-by-year}
+md_active %>% 
+  ggplot(aes(x = active_md_data_year, y = active_md_count, fill = active_md_data_year)) +
+  geom_col() +
+  facet_wrap(~ county_name) +
+  scale_fill_viridis_c()
+```
+
+```{r}
+hospitals %>% 
+  select(cnty_name, hosp_20, hosp_21) %>% 
+  arrange(cnty_name)
+
+hospital_admissions %>% 
+  select(cnty_name, hosp_adm_20, hosp_adm_21) %>% 
+  arrange(cnty_name)
+```
+
+```{r}
+
+```
 
 
 # Analysis
