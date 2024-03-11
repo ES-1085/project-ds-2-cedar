@@ -105,8 +105,9 @@ hpsa_pc_provider_counts <- hpsa_pc_all %>%
   bind_cols(hpsa_md_pc) %>%
   bind_cols(hpsa_do_pc) %>%
   select(county_name...1, pc_physician_count_year, pc_physician_count, md_pc_count, do_pc_count) %>%
-  rename(county_name = county_name...1,
-         count_year = pc_physician_count_year)
+  rename(county_name = county_name...1) %>% 
+  left_join(pop_counts) %>% 
+  distinct(county_name, pc_physician_count_year, pc_physician_count, md_pc_count, do_pc_count, census_year, census_count, popn_est_year, popn_est_count, .keep_all = TRUE)
 
 write_csv(hpsa_pc_provider_counts, "~/Desktop/GitHub/data_science_2/data/hpsa_pc_provider_counts.csv")
 ```

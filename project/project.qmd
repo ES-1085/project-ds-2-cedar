@@ -10,6 +10,7 @@ library(knitr)
 library(leaflet)
 library(lubridate)
 library(RColorBrewer)
+library(scales)
 library(tidymodels)
 library(tidyverse)
 ```
@@ -38,90 +39,113 @@ facility_types <- read.csv("~/Desktop/GitHub/data_science_2/data/facility_types.
 ```
 
 
+
+# Intro
+
 # Initial Exploration
 
-```{r hpsa-score-change}
+```{r hpsa-score-change, warning = false}
 hpsa_pc %>% 
-  ggplot(aes(x = data_year, y = hpsa_pc_score)) +
-  geom_line(color = "#00C377") +
+  ggplot(aes(x = hpsa_prim_care_data_year, y = hpsa_pc_score)) +
+  geom_line(color = "#007395") +
+  labs(title = "HPSA Primary Care Provider Score", subtitle = "By Maine County", x = "Year", y = "HPSA Primary Care Score", caption = "A score of 0 means a county is not in shortage, a score of 1 means the entire county is in shortage,\n and a score of 2 means parts of a county are in shortage.") +
+  theme_minimal() +
   facet_wrap(~ county_name)
 
 hpsa_dental %>% 
-  ggplot(aes(x = data_year, y = hpsa_dental_score)) +
-  geom_line(color = "#00C377") +
+  ggplot(aes(x = hpsa_dental_data_year, y = hpsa_dental_score)) +
+  geom_line(color = "#007395") +
+  labs(title = "HPSA Dental Care Provider Score", subtitle = "By Maine County", x = "Year", y = "HPSA Dental Care Score", caption = "A score of 0 means a county is not in shortage, a score of 1 means the entire county is in shortage,\n and a score of 2 means parts of a county are in shortage.") +
+  theme_minimal() +
   facet_wrap(~ county_name)
 
 hpsa_mh %>% 
-  ggplot(aes(x = data_year, y = hpsa_mh_score)) +
-  geom_line(color = "#00C377") + 
+  ggplot(aes(x = hpsa_mh_data_year, y = hpsa_mh_score)) +
+  geom_line(color = "#007395") + 
+  labs(title = "HPSA Mental Health Care Provider Score", subtitle = "By Maine County", x = "Year", y = "HPSA Mental Health Care Score", caption = "A score of 0 means a county is not in shortage, a score of 1 means the entire county is in shortage,\n and a score of 2 means parts of a county are in shortage.") +
+  theme_minimal() +
   facet_wrap(~ county_name)
 ```
 
 ```{r primary-care-provider-counts}
 hpsa_pc_provider_counts %>% 
   ggplot() +
-  geom_col(aes(x = count_year, y = pc_physician_count), fill = "#00608E") +
-  geom_col(aes(x = count_year, y = md_pc_count), fill = "#00AF8C") +
-  geom_col(aes(x = count_year, y = do_pc_count), fill = "#FDE333") +
-  facet_wrap(~ county_name)
+  geom_col(aes(x = pc_physician_count_year, y = pc_physician_count, fill = "Primary Care Physician Count")) +
+  geom_col(aes(x = pc_physician_count_year, y = md_pc_count, fill = "Primary Care (MD) Count")) +
+  geom_col(aes(x = pc_physician_count_year, y = do_pc_count, fill = "Primary Care (DO) Count")) +
+  labs(title = "Primary Care Physician Count by Year", subtitle = "By Maine County", x = "Year", y = "Primary Care Physician Count", fill = "Provider Type") +
+  theme_minimal() +
+  facet_wrap(~ county_name) +
+  scale_fill_viridis_d(begin = 0.1, end = 0.8)
+
+hpsa_pc_provider_counts %>% 
+  filter(census_year == "2020") %>% 
+  ggplot() +
+  geom_col(aes(x = pc_physician_count_year, y = pc_physician_count/census_count, fill = "Primary Care Physician Count")) +
+  geom_col(aes(x = pc_physician_count_year, y = md_pc_count/census_count, fill = "Primary Care (MD) Count")) +
+  geom_col(aes(x = pc_physician_count_year, y = do_pc_count/census_count, fill = "Primary Care (DO) Count")) +
+  scale_y_continuous(labels = label_comma()) +
+  labs(title = "Primary Care Physician Count by Year", subtitle = "By Maine County", x = "Year", y = "Primary Care Physician Count", fill = "Provider Type", caption = "Provider count is divided by county population as of the 2020 Census.") +
+  theme_minimal() +
+  facet_wrap(~ county_name) +
+  scale_fill_viridis_d(begin = 0.1, end = 0.8)
 
 hpsa_pc_provider_counts %>% 
   ggplot() +
-  geom_col(aes(x = count_year, y = pc_physician_count/cens_popn_20), fill = "#00608E") +
-  geom_col(aes(x = count_year, y = md_pc_count/cens_popn_20), fill = "#00AF8C") +
-  geom_col(aes(x = count_year, y = do_pc_count/cens_popn_20), fill = "#FDE333") +
-  facet_wrap(~ county_name)
+  geom_line(aes(x = pc_physician_count_year, y = pc_physician_count, color = "Primary Care Physician Count")) +
+  geom_line(aes(x = pc_physician_count_year, y = md_pc_count, color = "Primary Care (MD) Count")) +
+  geom_line(aes(x = pc_physician_count_year, y = do_pc_count, color = "Primary Care (DO) Count")) +
+  labs(title = "Primary Care Physician Count by Year", subtitle = "By Maine County", x = "Year", y = "Primary Care Physician Count", fill = "Provider Type") +
+  theme_minimal() +
+  facet_wrap(~ county_name) +
+  scale_color_viridis_d(begin = 0.4, end = 0.8)
 
 hpsa_pc_provider_counts %>% 
+  filter(census_year == "2020") %>% 
   ggplot() +
-  geom_line(aes(x = count_year, y = pc_physician_count)) +
-  geom_line(aes(x = count_year, y = md_pc_count)) +
-  geom_line(aes(x = count_year, y = do_pc_count)) +
-  facet_wrap(~ county_name)
-
-hpsa_pc_provider_counts %>% 
-  ggplot() +
-  geom_line(aes(x = count_year, y = pc_physician_count/cens_popn_20)) +
-  geom_line(aes(x = count_year, y = md_pc_count/cens_popn_20)) +
-  geom_line(aes(x = count_year, y = do_pc_count/cens_popn_20)) +
-  facet_wrap(~ county_name)
+  geom_line(aes(x = pc_physician_count_year, y = pc_physician_count/census_count, color = "Primary Care Physician Count")) +
+  geom_line(aes(x = pc_physician_count_year, y = md_pc_count/census_count, color = "Primary Care (MD) Count")) +
+  geom_line(aes(x = pc_physician_count_year, y = do_pc_count/census_count, color = "Primary Care (DO) Count")) +
+  scale_y_continuous(labels = label_comma()) + 
+  labs(title = "Primary Care Physician Count by Year", subtitle = "By Maine County", x = "Year", y = "Primary Care Physician Count", fill = "Provider Type", caption = "Provider count is divided by county population as of the 2020 Census.") +
+  theme_minimal() +
+  facet_wrap(~ county_name) +
+  scale_color_viridis_d(begin = 0.4, end = 0.8)
 ```
 
 ```{r active-md-count-by-year}
-md_active %>% 
-  ggplot(aes(x = active_md_data_year, y = active_md_count, fill = active_md_data_year)) +
-  geom_col() +
-  facet_wrap(~ county_name) +
-  scale_fill_viridis_c()
+md %>% 
+  ggplot(aes(x = md_data_year, y = active_md_count)) +
+  geom_col(fill = "#009796") +
+  labs(title = "Active MDs by Year", subtitle = "By Maine County", x = "Data Year", y = "Count") +
+  theme_minimal() +
+  facet_wrap(~ county_name)
 ```
-
-```{r}
-care_types %>% 
-  filter(count != "0") %>% 
-  ggplot(aes(y = care_type, fill = cnty_name)) +
-  geom_col(position = "dodge") +
-  facet_wrap(~ cnty_name, scales = "free")
-```
-
 
 ```{r psych-care-by-county}
 care_types %>% 
   filter(care_type %in% c("natal_postprtm_psych_svc", "psych_care", "psych_conslt_svc", "psych_conslttn_lisn_svc", "psych_eductnl_svc", "psych_gertrc_svc", "psych_intensv_outpt_svc", "psych_outpt_svc", "psych_ped_care_svc", "psych_php_adult", "psych_php_ped", "psych_rsdntl_tx_adult", "psych_rsdntl_tx_ped")) %>% 
+  mutate(care_type = recode(care_type, natal_postprtm_psych_svc = "Natal & Postpartum Psychiatric Services", psych_care = "Psychiatric Care", psych_conslt_svc = "Psychiatric Consult Services", psych_conslttn_lisn_svc = "Psychiatric Consultation Liasion Services", psych_eductnl_svc = "Psyciatric Educational Services", psych_gertrc_svc = "Geriatric Psychiatric Services", psych_intensv_outpt_svc = "Intensive Outpatient Services", psych_ped_care_svc = "Pediatric Psychiatric Care", psych_php_adult = "Adult Partial Hospitalization Program", psych_php_ped = "Pediatric Partial Hospitalization Program", psych_rsdntl_tx_adult = "Adult Psychiatric Residential Treatment", psych_rsdntl_tx_ped = "Pediatric Psychiatric Residential Treatment", psych_outpt_svc = "Outpatient Psychiatric Services")) %>% 
   filter(count != "0") %>% 
-  ggplot(aes(x = care_type, y = count, fill = cnty_name)) +
+  ggplot(aes(x = care_type, y = count, fill = care_type)) +
   geom_col() +
   coord_flip() +
-  facet_wrap(~ cnty_name, scales = "free") +
+  labs(title = "Psychiatric Care Offered by County", x = "Type of Care", y = "Count", fill = "Care Type") +
+  theme_minimal() +
+  facet_wrap(~ cnty_name, scales = "free", ncol = 3) +
   scale_fill_viridis_d()
 ```
 
 ```{r birth-care-by-county}
 care_types %>% 
   filter(care_type %in% c("birth_postprtm_rm", "obstetrc_care")) %>% 
+  mutate(care_type = recode(care_type, birth_postprtm_rm = "Birth & Postpartum", obstetrc_care = "OBGYN Services")) %>% 
   filter(count != "0") %>% 
   ggplot(aes(x = care_type, y = count, fill = cnty_name)) +
   geom_col() +
   coord_flip() +
+  theme_minimal() +
+  labs(title = "Birth, Postpartum, and OBGYN Services", subtitle = "By Maine County", x = "Care Type", y = "Count", fill = "County Name") +
   facet_wrap(~ cnty_name) +
   scale_fill_viridis_d()
 ```
@@ -129,74 +153,100 @@ care_types %>%
 ```{r ambulance-service-by-county}
 care_types %>% 
   filter(care_type %in% c("air_amb_svc", "amb_svc")) %>% 
+  mutate(care_type = recode(care_type, air_amb_svc = "Air Ambulance Service", amb_svc = "Ambulance Service")) %>% 
   filter(count != "0") %>% 
   ggplot(aes(x = care_type, y = count, fill = cnty_name)) +
   geom_col() +
   coord_flip() +
+  theme_minimal() +
+  labs(title = "Ambulance Services", subtitle = "By Maine County", x = "Type", y = "Count", fill = "County Name") +
   facet_wrap(~ cnty_name) +
   scale_fill_viridis_d()
 ```
 
 ```{r substance-use-treatment-by-county}
 care_types %>% 
-  filter(care_type %in% c("substnc_use_php", "substnc_use_ped_svc", "substnc_use_outpt_svc", "substnc_use_inpat_care", "substnc_use_outpt_svc")) %>%
+  filter(care_type %in% c("substnc_use_php", "substnc_use_ped_svc", "substnc_use_outpt_svc", "substnc_use_inpat_care")) %>%
+  mutate(care_type = recode(care_type, substnc_use_php = "Substance Use Partial Hospitalization Program", substnc_use_ped_svc = "Pediatric Substance Use Services", substnc_use_outpt_svc = "Outpatient Substance Use Services", substnc_use_inpat_care = "Inpatient Substance Use Care")) %>% 
   filter(count != "0") %>% 
   ggplot(aes(x = care_type, y = count, fill = cnty_name)) +
   geom_col() +
   coord_flip() +
+  theme_minimal() +
+  labs(title = "Substance Use Treatment", subtitle = "By Maine County", x = "Treatment Type", y = "Count", fill = "County Name")+
   facet_wrap(~ cnty_name, scales = "free") +
   scale_fill_viridis_d()
 ```
 
-```{r}
+```{r hospital-type-data}
 hosp_data %>% 
-  count(county_name, hosp_count_year, hosp_count, stgh_count, lth_count, sth_psych_count, sth_child_med_count, sth_child_psych_count, lth_psych_count, lth_child_psych_count, sth_comn_count, vetn_hosp_count, stgh_critcl_access_count, sole_comn_provdrs_count)
+  select(county_name, hosp_count_year, hosp_count, stgh_count, lth_count, sth_psych_count, sth_child_med_count, sth_child_psych_count, lth_psych_count, lth_child_psych_count, sth_comn_count, vetn_hosp_count, stgh_critcl_access_count, sole_comn_provdrs_count) %>% 
+  distinct(county_name, hosp_count_year, .keep_all = TRUE) %>% 
+  rename("County Name" = "county_name", "Year" = "hosp_count_year", "Hospitals" = "hosp_count", "Short Term General Hospitals" = "stgh_count", "Long Term Hospitals" = "lth_count", "Short Term Psychiatric Hospitals" = "sth_psych_count", "Short Term Pediatric Hospitals" = "sth_child_med_count", "Short Term Child Psychiatric Hospitals" = "sth_child_psych_count", "Long Term Psychiatric Hospitals" = "lth_psych_count", "Long Term Pediatric Psychiatric Hospitals" = "lth_child_psych_count", "Short Term Community Hospitals" = "sth_comn_count", "Veterans Hospitals" = "vetn_hosp_count", "Short Term General Critical Access Hospitals" = "stgh_critcl_access_count", "Sole Community Providers" = "sole_comn_provdrs_count")
 ```
 
-```{r}
+```{r hospital-adm-data}
 hosp_adm_data %>% 
-  count(county_name, hosp_adm_count_year, hosp_adm_count, stgh_hosp_count, stnglth_hosp_count, sth_comn_hosp_count)
+  select(county_name, hosp_adm_count_year, hosp_adm_count, stgh_hosp_count, stnglth_hosp_count, sth_comn_hosp_count) %>% 
+  distinct(county_name, hosp_adm_count_year, .keep_all = TRUE) %>% 
+  rename("County Name" = "county_name", "Year" = "hosp_adm_count_year", "Hospital Admissions" = "hosp_adm_count", "Short Term General Hospital Admissions" = "stgh_hosp_count", "Short Term Non-general and Long Term Hospital Admissions" = "stnglth_hosp_count", "Short Term Community Hospital Admissions" = "sth_comn_hosp_count")
 ```
 
-```{r}
+```{r dental-care}
 dental_care %>% 
-  count(cnty_name, dent_data_year, active_dentist_count)
+  select(cnty_name, dent_data_year, active_dentist_count) %>% 
+  distinct(cnty_name, dent_data_year, .keep_all = TRUE) %>% 
+  rename("County Name" = "cnty_name", "Year" = "dent_data_year", "Active Dentists" = "active_dentist_count")
 ```
 
-```{r}
+```{r facility-types}
 facility_types %>% 
-  count(cnty_name, facility_type_data_year, rural_health_clinic_count, community_mh_center_count, fqhc_count)
+  select(cnty_name, facility_type_data_year, rural_health_clinic_count, community_mh_center_count, fqhc_count) %>% 
+  distinct(cnty_name, facility_type_data_year, .keep_all = TRUE) %>% 
+  rename("County Name" = "cnty_name", "Year" = "facility_type_data_year", "Rural Health Clinics" = "rural_health_clinic_count", "Community Mental Health Centers" = "community_mh_center_count", "Federally Qualified Health Centers" = "fqhc_count")
 ```
 
-```{r}
+```{r all-mds}
 md %>% 
   ggplot(aes(x = md_data_year, y = active_md_count)) +
-  geom_line() +
+  geom_line(color = "#009796") +
+  theme_minimal() +
+  labs(title = "Active MD Count by Year", subtitle = "By Maine County", x = "Year", y = "Count") + 
   facet_wrap(~ county_name)
 
 md %>% 
   ggplot(aes(x = md_data_year, y = all_md_patient_care_count)) +
-  geom_line() +
+  geom_line(color = "#009796") +
+  theme_minimal() +
+  labs(title = "Active MDs in Patient Care by Year", subtitle = "By Maine County", x = "Year", y = "Count") +
   facet_wrap(~ county_name)
 ```
 
-```{r}
+```{r nurses}
 nurses %>% 
-  count(cnty_name, np_year, np_count, clin_nurse_count, crna_count, apn_midwives_count)
+  select(cnty_name, np_year, np_count, clin_nurse_count, crna_count, apn_midwives_count) %>% 
+  distinct(cnty_name, np_year, .keep_all = TRUE) %>% 
+  rename("County Name" = "cnty_name", "Year" = "np_year", "Nurse Practitioners" = "np_count", "Clinical Nurses" = "clin_nurse_count", "Certified Registered Nurse Anesthetists" = "crna_count", "Advance Practice Nurse Midwives" = "apn_midwives_count")
 ```
 
-```{r}
+```{r all-physicians}
 all_physicians %>% 
   filter(md_allergy_count != "0") %>% 
   ggplot(aes(x = county_name, y = md_allergy_count)) +
-  geom_col(position = "dodge") +
+  geom_col(fill = "#009796", position = "dodge") +
   coord_flip() +
+  theme_minimal() +
+  labs(title = "Allergist (MD) Counts", subtitle = "By Maine County", x = "County", y = "Count") +
   facet_wrap(~ physician_count_year, scales = "free")
 
 all_physicians %>% 
+  filter(census_year == "2020") %>% 
   ggplot(aes(x = physician_count_year, y = md_allergy_count/census_count)) +
-  geom_smooth(method = "lm", color = "grey") +
-  geom_line(alpha = 0.5) +
+  geom_smooth(method = "lm", color = "#AADB41") +
+  geom_line(alpha = 0.8, color = "#006992") +
+  theme_minimal() +
+  scale_y_continuous(labels = label_comma()) +
+  labs(title = "Allergist (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Allergist count was divided by county population as of the 2020 Census") +
   facet_wrap(~ county_name)
 ```
 
@@ -204,14 +254,20 @@ all_physicians %>%
 all_physicians %>% 
   filter(md_anesth_count != "0") %>% 
   ggplot(aes(x = county_name, y = md_anesth_count)) +
-  geom_col(position = "dodge") +
+  geom_col(fill = "#009796", position = "dodge") +
   coord_flip() +
+  theme_minimal() +
+  labs(title = "Anesthesiologist (MD) Counts", subtitle = "By Maine County", x = "County", y = "Count") +
   facet_wrap(~ physician_count_year, scales = "free")
 
 all_physicians %>% 
+  filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_anesth_count/census_count)) +
-  geom_smooth(method = "lm", color = "grey") +
-  geom_line(alpha = 0.5) +
+  geom_smooth(method = "lm", color = "#AADB41") +
+  geom_line(alpha = 0.8, color = "#006992") +
+  theme_minimal() +
+  scale_y_continuous(labels = label_comma()) +
+  labs(title = "Anesthesiologist (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Anesthesiologist count was divided by county population as of the 2020 Census") +
   facet_wrap(~ county_name)
 ```
 
@@ -219,14 +275,20 @@ all_physicians %>%
 all_physicians %>% 
   filter(md_card_count != "0") %>% 
   ggplot(aes(x = county_name, y = md_card_count)) +
-  geom_col(position = "dodge") +
+  geom_col(fill = "#009796", position = "dodge") +
   coord_flip() +
+  theme_minimal() +
+  labs(title = "Cardiologist (MD) Counts", subtitle = "By Maine County", x = "County", y = "Count") +
   facet_wrap(~ physician_count_year, scales = "free")
 
 all_physicians %>% 
+  filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_card_count/census_count)) +
-  geom_smooth(method = "lm", color = "grey") +
-  geom_line(alpha = 0.5) +
+  geom_smooth(method = "lm", color = "#AADB41") +
+  geom_line(alpha = 0.8, color = "#006992") +
+  theme_minimal() +
+  scale_y_continuous(labels = label_comma()) +
+  labs(title = "Cardiologist (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Cardiologist count was divided by county population as of the 2020 Census") +
   facet_wrap(~ county_name)
 ```
 
@@ -577,13 +639,13 @@ glance(gp_md_change_pop)$adj.r.squared %>%
 
 ```{r}
 hpsa_pc_provider_counts %>% 
-  ggplot(aes(x = count_year, y = pc_physician_count)) + 
+  ggplot(aes(x = pc_physician_count_year, y = pc_physician_count)) + 
   geom_point(position = "jitter", alpha = 0.5) +
   geom_smooth(method = "lm", se = FALSE)
 
 (pc_provider_change <- linear_reg() %>% 
   set_engine("lm") %>% 
-  fit(pc_physician_count ~ count_year + county_name, data = hpsa_pc_provider_counts))
+  fit(pc_physician_count ~ pc_physician_count_year + county_name, data = hpsa_pc_provider_counts))
 
 tidy(pc_provider_change)
 
@@ -594,9 +656,9 @@ pc_provider_change_aug %>%
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", se = FALSE)
 
-glance(gp_md_change_pop)$r.squared %>% 
+glance(pc_provider_change)$r.squared %>% 
   tidy()
-glance(gp_md_change_pop)$adj.r.squared %>% 
+glance(pc_provider_change)$adj.r.squared %>% 
   tidy()
 ```
 
