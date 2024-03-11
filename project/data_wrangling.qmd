@@ -16,149 +16,63 @@ ahrf_2020_2021 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2020_2021_
 ahrf_2021_2022 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2021_2022_maine.csv")
 ahrf_2022_2023 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2022_2023_maine.csv")
 ahrf_2019_2023 <- read.csv("~/Desktop/GitHub/data_science_2/data/ahrf_2019_2023.csv")
+hpsa_pc_provider_counts <- read.csv("~/Desktop/GitHub/data_science_2/data/hpsa_pc_provider_counts.csv")
+county_pop <- read.csv("~/Desktop/GitHub/data_science_2/data/county_pop.csv")
+md <- read.csv("~/Desktop/GitHub/data_science_2/data/md.csv")
+md_counts <- read.csv("~/Desktop/GitHub/data_science_2/data/md_counts.csv")
+do_counts <- read.csv("~/Desktop/GitHub/data_science_2/data/do_counts.csv")
+hpsa_pc <- read.csv("~/Desktop/GitHub/data_science_2/data/hpsa_pc.csv")
+hpsa_dental <- read.csv("~/Desktop/GitHub/data_science_2/data/hpsa_dental.csv")
+hpsa_mh <- read.csv("~/Desktop/GitHub/data_science_2/data/hpsa_mh.csv")
+all_physicians <- read.csv("~/Desktop/GitHub/data_science_2/data/all_physicians.csv")
+hosp_adm_data <- read.csv("~/Desktop/GitHub/data_science_2/data/hosp_adm_data.csv")
+hosp_data <- read.csv("~/Desktop/GitHub/data_science_2/data/hosp_data.csv")
+care_types <- read.csv("~/Desktop/GitHub/data_science_2/data/care_types.csv")
+dental_care <- read.csv("~/Desktop/GitHub/data_science_2/data/dental_care.csv")
+nurses <- read.csv("~/Desktop/GitHub/data_science_2/data/nurses.csv")
+facility_types <- read.csv("~/Desktop/GitHub/data_science_2/data/facility_types.csv")
 ```
 
 
 # Data Wrangling
 
-```{r data-subsets-hpsa}
-hpsa_areas <- ahrf_2019_2023 %>% 
-  select(year, county_name, hpsa_prim_care_23, hpsa_prim_care_22, hpsa_prim_care_21, hpsa_prim_care_20, hpsa_prim_care_19, hpsa_prim_care_18, hpsa_prim_care_17, hpsa_prim_care_16, hpsa_prim_care_15, hpsa_prim_care_10, hpsa_dent_23,hpsa_dent_22, hpsa_dent_21, hpsa_dent_20, hpsa_dent_19, hpsa_dent_18, hpsa_dent_17, hpsa_dent_16, hpsa_dent_15, hpsa_dent_10, hpsa_mentl_hlth_23, hpsa_mentl_hlth_22, hpsa_mentl_hlth_21, hpsa_mentl_hlth_20, hpsa_mentl_hlth_19, hpsa_mentl_hlth_18, hpsa_mentl_hlth_17, hpsa_mentl_hlth_16, hpsa_mentl_hlth_15, hpsa_mentl_hlth_10)
-
-hpsa_primary_care <- ahrf_2019_2023 %>% 
-  select(year, county_name, hpsa_prim_care_23, hpsa_prim_care_22, hpsa_prim_care_21, hpsa_prim_care_20, hpsa_prim_care_19, hpsa_prim_care_18, hpsa_prim_care_17, hpsa_prim_care_16, hpsa_prim_care_15, hpsa_prim_care_10)
-
-hpsa_dental_care <- ahrf_2019_2023 %>% 
-  select(year, county_name, hpsa_dent_23,hpsa_dent_22, hpsa_dent_21, hpsa_dent_20, hpsa_dent_19, hpsa_dent_18, hpsa_dent_17, hpsa_dent_16, hpsa_dent_15, hpsa_dent_10)
-
-hpsa_mh_care <- ahrf_2019_2023 %>% 
-  select(year, county_name, hpsa_mentl_hlth_23, hpsa_mentl_hlth_22, hpsa_mentl_hlth_21, hpsa_mentl_hlth_20, hpsa_mentl_hlth_19, hpsa_mentl_hlth_18, hpsa_mentl_hlth_17, hpsa_mentl_hlth_16, hpsa_mentl_hlth_15, hpsa_mentl_hlth_10)
-```
-
-```{r data-subsets-counties}
-androscoggin <- ahrf_2019_2023 %>% 
-  filter(county_name == "Androscoggin")
-
-aroostook <- ahrf_2019_2023 %>% 
-  filter(county_name == "Aroostook")
-
-cumberland <- ahrf_2019_2023 %>% 
-  filter(county_name == "Cumberland")
-
-franklin <- ahrf_2019_2023 %>% 
-  filter(county_name == "Franklin")
-
-hancock <- ahrf_2019_2023 %>% 
-  filter(county_name == "Hancock")
-
-kennebec <- ahrf_2019_2023 %>% 
-  filter(county_name == "Kennebec")
-
-knox <- ahrf_2019_2023 %>% 
-  filter(county_name == "Knox")
-
-lincoln <- ahrf_2019_2023 %>% 
-  filter(county_name == "Lincoln")
-
-oxford <- ahrf_2019_2023 %>% 
-  filter(county_name == "Oxford")
-
-penobscot <- ahrf_2019_2023 %>% 
-  filter(county_name == "Penobscot")
-
-piscataquis <- ahrf_2019_2023 %>% 
-  filter(county_name == "Piscataquis")
-
-sagadahoc <- ahrf_2019_2023 %>% 
-  filter(county_name == "Sagadahoc")
-
-somerset  <- ahrf_2019_2023 %>% 
-  filter(county_name == "Somerset")
-
-waldo <- ahrf_2019_2023 %>% 
-  filter(county_name == "Waldo")
-
-washington <- ahrf_2019_2023 %>% 
-  filter(county_name == "Washington")
-
-york <- ahrf_2019_2023 %>% 
-  filter(county_name == "York")
-```
-
-```{r dental-care}
-dental_care <- ahrf_2022_2023 %>% 
-  select(cnty_name, dent_npi_22, dent_npi_21, dent_nf_fed_proflly_activ_21, dent_nf_fed_proflly_activ_20)
-```
-
-```{r nurses}
-nurses <- ahrf_2022_2023 %>% 
-  select(cnty_name, np_npi_22, np_npi_21, clin_nurse_spec_npi_22, clin_nurse_spec_npi_21, crna_npi_22, crna_npi_21, apn_midwvs_npi_22, apn_midwvs_npi_21)
-```
-
-```{r hosp-admissions}
-hospital_admissions <- ahrf_2022_2023 %>% 
-  select(cnty_name, hosp_adm_21, hosp_adm_20, stgh_hosp_adm_21, stgh_hosp_adm_20, stnglth_hosp_adm_21, stnglth_hosp_adm_20, sth_comn_hosp_adm_21, sth_comn_hosp_adm_20)
-```
-
-```{r hospitals}
-hospitals <- ahrf_2022_2023 %>% 
-  select(cnty_name, hosp_21, hosp_20, stgh_21, stgh_20, lth_21, lth_20, sth_psych_21, sth_psych_20, sth_child_med_21, sth_child_med_20, sth_child_psych_21, sth_child_psych_20, lth_psych_21, lth_psych_20, lth_child_psych_21, lth_child_psych_20, sth_comn_21, sth_comn_20, vetn_hosp_21, vetn_hosp_20, stgh_critcl_access_21, stgh_critcl_access_20, sole_comn_provdrs_21, sole_comn_provdrs_20)
-```
-
-```{r hospital-care-type}
-hospital_care_types <- ahrf_2022_2023 %>% 
-  select(cnty_name, stgh_gen_med_surg_care_adult_21, stgh_gen_med_surg_care_ped_21, stgh_obstetrc_care_21, stgh_neonat_icu_21, stgh_amb_svc_21, stgh_air_amb_svc_21, stgh_birth_postprtm_rm_21, stgh_case_mgmt_21, stnglth_case_mgmt_21, stgh_chemthpy_21, stgh_criss_prevn_21, stgh_ed_21, stgh_off_camps_ed_21, stgh_ped_ed_21, stgh_cert_tram_ctr_21, stgh_comn_hlth_eductn_21, stgh_oncolgy_svc_21, stgh_prim_care_deprtmnt_21, stgh_psych_conslttn_lisn_svc_21, stnglth_psych_conslt_svc_21, stgh_psych_ped_care_svc_21, stgh_psych_gertrc_svc_21, stgh_psych_eductnl_svc_21, stgh_psych_outpt_svc_21, stgh_psych_intensv_outpt_svc_21, sth_socl_comn_psych_svc_21, sth_natal_postprtm_psych_svc_21, stgh_psych_php_adult_21, stgh_psych_php_ped_21, stgh_psych_rsdntl_tx_adult_21, stgh_psych_rsdntl_tx_ped_21, stgh_rural_hlth_clincs_21, stgh_psych_care_21, stgh_substnc_use_inpat_care_21, stgh_substnc_use_ped_svc_21, stgh_substnc_use_outpt_svc_21, stgh_substnc_use_php_21, sth_med_assistd_opid_tx_21, sth_med_assistd_oth_subst_tx_21, rural_hlth_clincs_22, rural_hlth_clincs_21, comn_mentl_hlth_ctr_22, comn_mentl_hlth_ctr_21, fedly_qualfd_hlth_ctr_22, fedly_qualfd_hlth_ctr_21, comn_hlth_ctr_grants_only_23, comn_hlth_ctr_grants_only_22, cens_popn_20, cens_popn_10, popn_est_22, popn_est_21, popn_21, popn_20, )
-```
-
-```{r facility-types}
-facility_types <- ahrf_2022_2023 %>% 
-  select(cnty_name, rural_hlth_clincs_22, rural_hlth_clincs_21, comn_mentl_hlth_ctr_22, comn_mentl_hlth_ctr_21, fedly_qualfd_hlth_ctr_22, fedly_qualfd_hlth_ctr_21, comn_hlth_ctr_grants_only_23, comn_hlth_ctr_grants_only_22)
-```
-
 ```{r population}
-population <- ahrf_2022_2023 %>% 
+population <- ahrf_2022_2023 %>%
   select(cnty_name, cens_popn_20, cens_popn_10, popn_est_22, popn_est_21, popn_21, popn_20)
 ```
 
-```{r hpsa-areas-data-clean-up}
-hpsa_pc <- hpsa_primary_care %>%
-  select(-year) %>%
-  pivot_longer(starts_with("hpsa_prim_care"), names_to = "data_year", values_to = "hpsa_pc_score", names_prefix = "hpsa_prim_care_") %>% 
-  mutate(data_year = as.numeric(data_year) + 2000) %>% 
-  drop_na(hpsa_pc_score) %>% 
-  distinct(county_name, data_year, .keep_all = TRUE)
-
-hpsa_dental <- hpsa_dental_care %>% 
-  select(-year) %>% 
-  pivot_longer(starts_with("hpsa_dent_"), names_to = "data_year", values_to = "hpsa_dental_score", names_prefix = "hpsa_dent_") %>% 
-  mutate(data_year = as.numeric(data_year) + 2000) %>% 
-  drop_na(hpsa_dental_score) %>% 
-  distinct(county_name, data_year, .keep_all = TRUE)
-
-hpsa_mh <- hpsa_mh_care %>% 
-  select(-year) %>% 
-  pivot_longer(starts_with("hpsa_mentl_hlth"), names_to = "data_year", values_to = "hpsa_mh_score", names_prefix = "hpsa_mentl_hlth_") %>% 
-  mutate(data_year = as.numeric(data_year) + 2000) %>% 
-  drop_na(hpsa_mh_score) %>% 
-  distinct(county_name, data_year, .keep_all = TRUE)
-```
-
 ```{r maine-population}
-maine_pop <- ahrf_2022_2023 %>% 
-  select(cnty_name, cens_popn_20, cens_popn_10)
+maine_pop <- ahrf_2022_2023 %>%
+  select(cnty_name, cens_popn_20, cens_popn_10, popn_est_22, popn_est_21, popn_21, popn_20)
 ```
 
 ```{r ahrf-with-census}
-ahrf_with_census <- ahrf_2019_2023 %>% 
+ahrf_with_census <- ahrf_2019_2023 %>%
   left_join(y = maine_pop, by = c("county_name" = "cnty_name"))
 ```
 
 ```{r county-population}
-county_pop <- ahrf_with_census %>% 
-  select(county_name, cens_popn_20, cens_popn_10) %>% 
-  pivot_longer(starts_with("cens_popn"), names_to = "census_year", values_to = "popn_count", names_prefix = "cens_popn_") %>% 
-  mutate(census_year = as.numeric(census_year) + 2000) %>% 
+county_pop <- ahrf_with_census %>%
+  select(county_name, cens_popn_20, cens_popn_10) %>%
+  pivot_longer(starts_with("cens_popn"), names_to = "census_year", values_to = "popn_count", names_prefix = "cens_popn_") %>%
+  mutate(census_year = as.numeric(census_year) + 2000) %>%
   distinct(county_name, census_year, popn_count)
+
+write_csv(county_pop, "~/Desktop/GitHub/data_science_2/data/county_pop.csv")
+```
+
+```{r data-subsets-hpsa}
+hpsa_areas <- ahrf_2019_2023 %>%
+  select(year, county_name, hpsa_prim_care_23, hpsa_prim_care_22, hpsa_prim_care_21, hpsa_prim_care_20, hpsa_prim_care_19, hpsa_prim_care_18, hpsa_prim_care_17, hpsa_prim_care_16, hpsa_prim_care_15, hpsa_prim_care_10, hpsa_dent_23,hpsa_dent_22, hpsa_dent_21, hpsa_dent_20, hpsa_dent_19, hpsa_dent_18, hpsa_dent_17, hpsa_dent_16, hpsa_dent_15, hpsa_dent_10, hpsa_mentl_hlth_23, hpsa_mentl_hlth_22, hpsa_mentl_hlth_21, hpsa_mentl_hlth_20, hpsa_mentl_hlth_19, hpsa_mentl_hlth_18, hpsa_mentl_hlth_17, hpsa_mentl_hlth_16, hpsa_mentl_hlth_15, hpsa_mentl_hlth_10)
+
+hpsa_primary_care <- ahrf_2019_2023 %>%
+  select(year, county_name, hpsa_prim_care_23, hpsa_prim_care_22, hpsa_prim_care_21, hpsa_prim_care_20, hpsa_prim_care_19, hpsa_prim_care_18, hpsa_prim_care_17, hpsa_prim_care_16, hpsa_prim_care_15, hpsa_prim_care_10)
+
+hpsa_dental_care <- ahrf_2019_2023 %>%
+  select(year, county_name, hpsa_dent_23,hpsa_dent_22, hpsa_dent_21, hpsa_dent_20, hpsa_dent_19, hpsa_dent_18, hpsa_dent_17, hpsa_dent_16, hpsa_dent_15, hpsa_dent_10)
+
+hpsa_mh_care <- ahrf_2019_2023 %>%
+  select(year, county_name, hpsa_mentl_hlth_23, hpsa_mentl_hlth_22, hpsa_mentl_hlth_21, hpsa_mentl_hlth_20, hpsa_mentl_hlth_19, hpsa_mentl_hlth_18, hpsa_mentl_hlth_17, hpsa_mentl_hlth_16, hpsa_mentl_hlth_15, hpsa_mentl_hlth_10)
 ```
 
 ```{r hpsa-pc-provider-counts, warning = FALSE, echo = FALSE, message = FALSE}
@@ -172,122 +86,125 @@ prelim_hpsa_pc_provider_counts <- ahrf_with_census %>%
   mutate(do_pc_count_year = as.numeric(do_pc_count_year) + 2000) %>%
   distinct(county_name, pc_physician_count_year, pc_physician_count, md_pc_count_year, md_pc_count, do_pc_count_year, do_pc_count, .keep_all = TRUE)
 
-hpsa_pc_all <- prelim_hpsa_pc_provider_counts %>% 
-  select(county_name, cens_popn_20, cens_popn_10, pc_physician_count_year, pc_physician_count) %>% 
-  drop_na(pc_physician_count_year, pc_physician_count) %>% 
+hpsa_pc_all <- prelim_hpsa_pc_provider_counts %>%
+  select(county_name, cens_popn_20, cens_popn_10, pc_physician_count_year, pc_physician_count) %>%
+  drop_na(pc_physician_count_year, pc_physician_count) %>%
   distinct(county_name, pc_physician_count_year, .keep_all = TRUE)
 
-hpsa_md_pc <- prelim_hpsa_pc_provider_counts %>% 
-  select(county_name, md_pc_count_year, md_pc_count) %>% 
-  drop_na(md_pc_count_year, md_pc_count) %>% 
-  distinct(county_name, md_pc_count_year, .keep_all = TRUE)  
+hpsa_md_pc <- prelim_hpsa_pc_provider_counts %>%
+  select(county_name, md_pc_count_year, md_pc_count) %>%
+  drop_na(md_pc_count_year, md_pc_count) %>%
+  distinct(county_name, md_pc_count_year, .keep_all = TRUE)
 
-hpsa_do_pc <- prelim_hpsa_pc_provider_counts %>% 
-  select(county_name, do_pc_count_year, do_pc_count) %>% 
-  drop_na(do_pc_count_year, do_pc_count) %>% 
-  distinct(county_name, do_pc_count_year, .keep_all = TRUE)   
+hpsa_do_pc <- prelim_hpsa_pc_provider_counts %>%
+  select(county_name, do_pc_count_year, do_pc_count) %>%
+  drop_na(do_pc_count_year, do_pc_count) %>%
+  distinct(county_name, do_pc_count_year, .keep_all = TRUE)
 
 hpsa_pc_provider_counts <- hpsa_pc_all %>%
-  bind_cols(hpsa_md_pc) %>% 
-  bind_cols(hpsa_do_pc) %>% 
-  select(county_name...1, cens_popn_20, cens_popn_10, pc_physician_count_year, pc_physician_count, md_pc_count, do_pc_count) %>% 
+  bind_cols(hpsa_md_pc) %>%
+  bind_cols(hpsa_do_pc) %>%
+  select(county_name...1, pc_physician_count_year, pc_physician_count, md_pc_count, do_pc_count) %>%
   rename(county_name = county_name...1,
          count_year = pc_physician_count_year)
+
+write_csv(hpsa_pc_provider_counts, "~/Desktop/GitHub/data_science_2/data/hpsa_pc_provider_counts.csv")
+```
+
+```{r hpsa-areas-data-clean-up}
+hpsa_pc <- hpsa_primary_care %>%
+  select(-year) %>%
+  pivot_longer(starts_with("hpsa_prim_care"), names_to = "hpsa_prim_care_data_year", values_to = "hpsa_pc_score", names_prefix = "hpsa_prim_care_") %>%
+  mutate(hpsa_prim_care_data_year = as.numeric(hpsa_prim_care_data_year) + 2000) %>%
+  drop_na(hpsa_pc_score) %>%
+  distinct(county_name, hpsa_prim_care_data_year, .keep_all = TRUE)
+write_csv(hpsa_pc, "~/Desktop/GitHub/data_science_2/data/hpsa_pc.csv")
+
+hpsa_dental <- hpsa_dental_care %>%
+  select(-year) %>%
+  pivot_longer(starts_with("hpsa_dent_"), names_to = "hpsa_dental_data_year", values_to = "hpsa_dental_score", names_prefix = "hpsa_dent_") %>%
+  mutate(hpsa_dental_data_year = as.numeric(hpsa_dental_data_year) + 2000) %>%
+  drop_na(hpsa_dental_score) %>%
+  distinct(county_name, hpsa_dental_data_year, .keep_all = TRUE)
+write_csv(hpsa_dental, "~/Desktop/GitHub/data_science_2/data/hpsa_dental.csv")
+
+hpsa_mh <- hpsa_mh_care %>%
+  select(-year) %>%
+  pivot_longer(starts_with("hpsa_mentl_hlth"), names_to = "hpsa_mh_data_year", values_to = "hpsa_mh_score", names_prefix = "hpsa_mentl_hlth_") %>%
+  mutate(hpsa_mh_data_year = as.numeric(hpsa_mh_data_year) + 2000) %>%
+  drop_na(hpsa_mh_score) %>%
+  distinct(county_name, hpsa_mh_data_year, .keep_all = TRUE)
+write_csv(hpsa_mh, "~/Desktop/GitHub/data_science_2/data/hpsa_mh.csv")
 ```
 
 ```{r active-md, message = FALSE, warning = FALSE, echo = FALSE}
-prelim_md <- ahrf_2019_2023 %>% 
-  select(county_name, md_nf_activ_21, md_nf_activ_20, md_nf_activ_19, md_nf_activ_18, md_nf_activ_17, md_nf_activ_16, md_nf_activ_15, md_nf_activ_14, md_nf_activ_13, md_nf_activ_12, md_nf_activ_11, md_nf_activ_10, md_nf_all_pc_21, md_nf_all_pc_20, md_nf_all_pc_19, md_nf_all_pc_18,	md_nf_all_pc_17, md_nf_all_pc_16, md_nf_all_pc_15, md_nf_all_pc_14, md_nf_all_pc_13, md_nf_all_pc_12,	md_nf_all_pc_11, md_nf_all_pc_10) %>% 
-  pivot_longer(starts_with("md_nf_activ"), names_to = "active_md_data_year", values_to = "active_md_count", names_prefix = "md_nf_activ_") %>% 
-  pivot_longer(starts_with("md_nf_all_pc"), names_to = "all_md_patient_care_data_year", values_to = "all_md_patient_care_count", names_prefix = "md_nf_all_pc_") %>% 
-  mutate(active_md_data_year = as.numeric(active_md_data_year) + 2000) %>% 
-  mutate(all_md_patient_care_data_year = as.numeric(all_md_patient_care_data_year) + 2000) %>% 
+prelim_md <- ahrf_2019_2023 %>%
+  select(county_name, md_nf_activ_21, md_nf_activ_20, md_nf_activ_19, md_nf_activ_18, md_nf_activ_17, md_nf_activ_16, md_nf_activ_15, md_nf_activ_14, md_nf_activ_13, md_nf_activ_12, md_nf_activ_11, md_nf_activ_10, md_nf_all_pc_21, md_nf_all_pc_20, md_nf_all_pc_19, md_nf_all_pc_18,	md_nf_all_pc_17, md_nf_all_pc_16, md_nf_all_pc_15, md_nf_all_pc_14, md_nf_all_pc_13, md_nf_all_pc_12,	md_nf_all_pc_11, md_nf_all_pc_10) %>%
+  pivot_longer(starts_with("md_nf_activ"), names_to = "active_md_data_year", values_to = "active_md_count", names_prefix = "md_nf_activ_") %>%
+  pivot_longer(starts_with("md_nf_all_pc"), names_to = "all_md_patient_care_data_year", values_to = "all_md_patient_care_count", names_prefix = "md_nf_all_pc_") %>%
+  mutate(active_md_data_year = as.numeric(active_md_data_year) + 2000) %>%
+  mutate(all_md_patient_care_data_year = as.numeric(all_md_patient_care_data_year) + 2000) %>%
   distinct(county_name, active_md_data_year, active_md_count, all_md_patient_care_data_year, all_md_patient_care_count, .keep_all = TRUE)
 
-md_active <- prelim_md %>% 
-  select(county_name, active_md_data_year, active_md_count) %>% 
-  drop_na(active_md_data_year, active_md_count) %>% 
+md_active <- prelim_md %>%
+  select(county_name, active_md_data_year, active_md_count) %>%
+  drop_na(active_md_data_year, active_md_count) %>%
   distinct(county_name, active_md_data_year, active_md_count)
 
-all_md <- prelim_md %>% 
-  select(county_name, all_md_patient_care_data_year, all_md_patient_care_count) %>% 
-  drop_na(all_md_patient_care_data_year, all_md_patient_care_count) %>% 
+all_md <- prelim_md %>%
+  select(county_name, all_md_patient_care_data_year, all_md_patient_care_count) %>%
+  drop_na(all_md_patient_care_data_year, all_md_patient_care_count) %>%
   distinct(county_name, all_md_patient_care_data_year, all_md_patient_care_count)
 
-md <- md_active %>% 
-  bind_cols(all_md) %>% 
-  select(county_name...1, active_md_data_year, active_md_count, all_md_patient_care_count) %>% 
+md <- md_active %>%
+  bind_cols(all_md) %>%
+  select(county_name...1, active_md_data_year, active_md_count, all_md_patient_care_count) %>%
   rename(county_name = county_name...1,
-         data_year = active_md_data_year)
-```
+         md_data_year = active_md_data_year)
 
-```{r hpsa-and-pop}
-hpsa_pc_pop <- hpsa_pc %>% 
-  full_join(maine_pop, join_by(county_name == cnty_name))
-
-hpsa_dental_pop <- hpsa_dental %>% 
-   full_join(maine_pop, join_by(county_name == cnty_name))
-
-hpsa_mh_pop <- hpsa_mh %>% 
-   full_join(maine_pop, join_by(county_name == cnty_name))
+write_csv(md, "~/Desktop/GitHub/data_science_2/data/md.csv")
 ```
 
 ```{r md-counts-select}
-prelim_md_count <- ahrf_2019_2023 %>% 
-  select(county_name, md_nf_all_gp_21, md_nf_all_gp_20, md_nf_all_gp_19,	md_nf_all_gp_18, md_nf_all_gp_15,	md_nf_all_gp_10, 
-         md_nf_fammed_gen_21, md_nf_fammed_gen_20,	md_nf_fammed_gen_19, md_nf_fammed_gen_18, md_nf_fammed_gen_15,	md_nf_fammed_gen_10,
-         md_nf_all_med_spec_21, md_nf_all_med_spec_20, md_nf_all_med_spec_19,	md_nf_all_med_spec_18,	md_nf_all_med_spec_15, md_nf_all_med_spec_10,
-         md_nf_allergy_21,	md_nf_allergy_20,	md_nf_allergy_19,	md_nf_allergy_18,	md_nf_allergy_15,	md_nf_allergy_10, 
-         md_nf_card_dis_21, md_nf_card_dis_20,	md_nf_card_dis_19,	md_nf_card_dis_18, md_nf_card_dis_15, md_nf_card_dis_10, 
-         md_nf_derm_21,	md_nf_derm_20, md_nf_derm_19,	md_nf_derm_18, md_nf_derm_15, md_nf_derm_10, 
-         md_nf_gastr_21, md_nf_gastr_20, md_nf_gastr_19, md_nf_gastr_18,	md_nf_gastr_15, md_nf_gastr_10, 
-         md_nf_genintmed_21,	md_nf_genintmed_20,	md_nf_genintmed_19,	md_nf_genintmed_18,	md_nf_genintmed_15,	md_nf_genintmed_10, 
-         md_nf_ped_gen_21, md_nf_ped_gen_20,	md_nf_ped_gen_19,	md_nf_ped_gen_18,	md_nf_ped_gen_15,	md_nf_ped_gen_10, 
-         md_nf_all_surg_spec_21,	md_nf_all_surg_spec_20,	md_nf_all_surg_spec_19,	md_nf_all_surg_spec_18,	md_nf_all_surg_spec_15,	md_nf_all_surg_spec_10,
-         md_nf_gen_surg_21, md_nf_gen_surg_20,	md_nf_gen_surg_19, md_nf_gen_surg_18,	md_nf_gen_surg_15, md_nf_gen_surg_10, 
-         md_nf_obgyn_gen_21,	md_nf_obgyn_gen_20,	md_nf_obgyn_gen_19,	md_nf_obgyn_gen_18,	md_nf_obgyn_gen_15,	md_nf_obgyn_gen_10, 
-         md_nf_ophth_21,	md_nf_ophth_20,	md_nf_ophth_19, md_nf_ophth_18,	md_nf_ophth_15,	md_nf_ophth_10, 
-         md_nf_anesth_21, md_nf_anesth_20,	md_nf_anesth_19,	md_nf_anesth_18, md_nf_anesth_15,	md_nf_anesth_10, 
-         md_nf_child_psych_21, md_nf_child_psych_20,	md_nf_child_psych_19,	md_nf_child_psych_18,	md_nf_child_psych_15,	md_nf_child_psych_10,
-         md_nf_emerg_med_21,	md_nf_emerg_med_20,	md_nf_emerg_med_19,	md_nf_emerg_med_18,	md_nf_emerg_med_15,	md_nf_emerg_med_10, md_nf_neuro_21,
-         md_nf_neuro_20, md_nf_neuro_19,	md_nf_neuro_18,	md_nf_neuro_15,	md_nf_neuro_10, 
-         md_nf_psych_21,	md_nf_psych_20,	md_nf_psych_19,	md_nf_psych_18,	md_nf_psych_15,	md_nf_psych_10)
+prelim_md_count <- ahrf_with_census %>%
+  select(county_name, md_nf_all_gp_21, md_nf_all_gp_20, md_nf_all_gp_19,	md_nf_all_gp_18, md_nf_all_gp_15,	md_nf_all_gp_10,
+         md_nf_fammed_gen_21, md_nf_fammed_gen_20,	md_nf_fammed_gen_19, md_nf_fammed_gen_18, md_nf_fammed_gen_15,	md_nf_fammed_gen_10, md_nf_all_med_spec_21, md_nf_all_med_spec_20, md_nf_all_med_spec_19,	md_nf_all_med_spec_18,	md_nf_all_med_spec_15, md_nf_all_med_spec_10, md_nf_allergy_21,	md_nf_allergy_20,	md_nf_allergy_19,	md_nf_allergy_18,	md_nf_allergy_15,	md_nf_allergy_10, md_nf_card_dis_21, md_nf_card_dis_20,	md_nf_card_dis_19,	md_nf_card_dis_18, md_nf_card_dis_15, md_nf_card_dis_10, md_nf_derm_21,	md_nf_derm_20, md_nf_derm_19,	md_nf_derm_18, md_nf_derm_15, md_nf_derm_10, md_nf_gastr_21, md_nf_gastr_20, md_nf_gastr_19, md_nf_gastr_18,	md_nf_gastr_15, md_nf_gastr_10, md_nf_genintmed_21,	md_nf_genintmed_20,	md_nf_genintmed_19,	md_nf_genintmed_18,	md_nf_genintmed_15,	md_nf_genintmed_10, md_nf_ped_gen_21, md_nf_ped_gen_20,	md_nf_ped_gen_19,	md_nf_ped_gen_18,	md_nf_ped_gen_15,	md_nf_ped_gen_10, md_nf_all_surg_spec_21,	md_nf_all_surg_spec_20,	md_nf_all_surg_spec_19,	md_nf_all_surg_spec_18,	md_nf_all_surg_spec_15,	md_nf_all_surg_spec_10, md_nf_gen_surg_21, md_nf_gen_surg_20,	md_nf_gen_surg_19, md_nf_gen_surg_18,	md_nf_gen_surg_15, md_nf_gen_surg_10, md_nf_obgyn_gen_21,	md_nf_obgyn_gen_20,	md_nf_obgyn_gen_19,	md_nf_obgyn_gen_18,	md_nf_obgyn_gen_15,	md_nf_obgyn_gen_10, md_nf_ophth_21,	md_nf_ophth_20,	md_nf_ophth_19, md_nf_ophth_18,	md_nf_ophth_15,	md_nf_ophth_10, md_nf_anesth_21, md_nf_anesth_20,	md_nf_anesth_19,	md_nf_anesth_18, md_nf_anesth_15,	md_nf_anesth_10, md_nf_child_psych_21, md_nf_child_psych_20,	md_nf_child_psych_19,	md_nf_child_psych_18,	md_nf_child_psych_15,	md_nf_child_psych_10, md_nf_emerg_med_21,	md_nf_emerg_med_20,	md_nf_emerg_med_19,	md_nf_emerg_med_18,	md_nf_emerg_med_15,	md_nf_emerg_med_10, md_nf_neuro_21, md_nf_neuro_20, md_nf_neuro_19,	md_nf_neuro_18,	md_nf_neuro_15,	md_nf_neuro_10, md_nf_psych_21,	md_nf_psych_20,	md_nf_psych_19,	md_nf_psych_18,	md_nf_psych_15,	md_nf_psych_10, cens_popn_20, cens_popn_10, popn_est_22, popn_est_21, popn_21, popn_20)
 ```
 
 ```{r md-count-pivots, warning = FALSE}
 prelim_all_md_count <- prelim_md_count %>%
-  pivot_longer(starts_with("md_nf_all_gp"), names_to = "all_gp_md_year", values_to = "all_gp_md_count", names_prefix = "md_nf_all_gp_") %>% 
+  pivot_longer(starts_with("md_nf_all_gp"), names_to = "all_gp_md_year", values_to = "all_gp_md_count", names_prefix = "md_nf_all_gp_") %>%
    mutate(all_gp_md_year = as.numeric(all_gp_md_year) + 2000) %>%
    select(county_name, all_gp_md_year, all_gp_md_count) %>%
    drop_na(all_gp_md_year, all_gp_md_count) %>%
    distinct(county_name, all_gp_md_year, .keep_all = TRUE)
 
-prelim_fammed_md_count <- prelim_md_count %>% 
-  pivot_longer(starts_with("md_nf_fammed_gen"), names_to = "md_fammed_year", values_to = "md_fammed_count", names_prefix = "md_nf_fammed_gen_") %>% 
-  mutate(md_fammed_year = as.numeric(md_fammed_year) + 2000) %>% 
-  select(county_name, md_fammed_year, md_fammed_count) %>% 
-  drop_na(md_fammed_year, md_fammed_count) %>% 
+prelim_fammed_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_fammed_gen"), names_to = "md_fammed_year", values_to = "md_fammed_count", names_prefix = "md_nf_fammed_gen_") %>%
+  mutate(md_fammed_year = as.numeric(md_fammed_year) + 2000) %>%
+  select(county_name, md_fammed_year, md_fammed_count) %>%
+  drop_na(md_fammed_year, md_fammed_count) %>%
   distinct(county_name, md_fammed_year, .keep_all = TRUE)
-  
-prelim_spec_md_count <- prelim_md_count %>%   
-  pivot_longer(starts_with("md_nf_all_med_spec"), names_to = "md_spec_year", values_to = "md_spec_count", names_prefix = "md_nf_all_med_spec_") %>% 
-  mutate(md_spec_year = as.numeric(md_spec_year) + 2000) %>% 
-  select(county_name, md_spec_year, md_spec_count) %>% 
-  drop_na(md_spec_year, md_spec_count) %>% 
+
+prelim_spec_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_all_med_spec"), names_to = "md_spec_year", values_to = "md_spec_count", names_prefix = "md_nf_all_med_spec_") %>%
+  mutate(md_spec_year = as.numeric(md_spec_year) + 2000) %>%
+  select(county_name, md_spec_year, md_spec_count) %>%
+  drop_na(md_spec_year, md_spec_count) %>%
   distinct(county_name, md_spec_year, .keep_all = TRUE)
-  
-prelim_allergy_md_count <- prelim_md_count %>% 
-  pivot_longer(starts_with("md_nf_allergy"), names_to = "md_allergy_year", values_to = "md_allergy_count", names_prefix = "md_nf_allergy_") %>% 
-  mutate(md_allergy_year = as.numeric(md_allergy_year) + 2000) %>%  
-  select(county_name, md_allergy_year, md_allergy_count) %>% 
-  drop_na(md_allergy_year, md_allergy_count) %>% 
+
+prelim_allergy_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_allergy"), names_to = "md_allergy_year", values_to = "md_allergy_count", names_prefix = "md_nf_allergy_") %>%
+  mutate(md_allergy_year = as.numeric(md_allergy_year) + 2000) %>%
+  select(county_name, md_allergy_year, md_allergy_count) %>%
+  drop_na(md_allergy_year, md_allergy_count) %>%
   distinct(county_name, md_allergy_year, .keep_all = TRUE)
-  
-prelim_card_md_count <- prelim_md_count %>% 
-  pivot_longer(starts_with("md_nf_card_dis"), names_to = "md_card_year", values_to = "md_card_count", names_prefix = "md_nf_card_dis_") %>% 
-  mutate(md_card_year = as.numeric(md_card_year) + 2000) %>% 
-  select(county_name, md_card_year, md_card_count) %>% 
-  drop_na(md_card_year, md_card_count) %>% 
+
+prelim_card_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_card_dis"), names_to = "md_card_year", values_to = "md_card_count", names_prefix = "md_nf_card_dis_") %>%
+  mutate(md_card_year = as.numeric(md_card_year) + 2000) %>%
+  select(county_name, md_card_year, md_card_count) %>%
+  drop_na(md_card_year, md_card_count) %>%
   distinct(county_name, md_card_year, .keep_all = TRUE)
 
 prelim_child_psych_md_count <- prelim_md_count %>%
@@ -296,75 +213,75 @@ prelim_child_psych_md_count <- prelim_md_count %>%
   select(county_name, md_child_psych_year, md_child_psych_count) %>%
   drop_na(md_child_psych_year, md_child_psych_count) %>%
   distinct(county_name, md_child_psych_year, .keep_all = TRUE)
-  
-prelim_derm_md_count <- prelim_md_count %>%   
-  pivot_longer(starts_with("md_nf_derm"), names_to = "md_derm_year", values_to = "md_derm_count", names_prefix = "md_nf_derm_") %>% 
-  mutate(md_derm_year = as.numeric(md_derm_year) + 2000) %>% 
-  select(county_name, md_derm_year, md_derm_count) %>% 
-  drop_na(md_derm_year, md_derm_count) %>% 
+
+prelim_derm_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_derm"), names_to = "md_derm_year", values_to = "md_derm_count", names_prefix = "md_nf_derm_") %>%
+  mutate(md_derm_year = as.numeric(md_derm_year) + 2000) %>%
+  select(county_name, md_derm_year, md_derm_count) %>%
+  drop_na(md_derm_year, md_derm_count) %>%
   distinct(county_name, md_derm_year, .keep_all = TRUE)
 
-prelim_gastr_md_count <- prelim_md_count %>%   
-  pivot_longer(starts_with("md_nf_gastr"), names_to = "md_gastr_year", values_to = "md_gastr_count", names_prefix = "md_nf_gastr_") %>% 
-  mutate(md_gastr_year = as.numeric(md_gastr_year) + 2000) %>% 
-  select(county_name, md_gastr_year, md_gastr_count) %>% 
-  drop_na(md_gastr_year, md_gastr_count) %>% 
+prelim_gastr_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_gastr"), names_to = "md_gastr_year", values_to = "md_gastr_count", names_prefix = "md_nf_gastr_") %>%
+  mutate(md_gastr_year = as.numeric(md_gastr_year) + 2000) %>%
+  select(county_name, md_gastr_year, md_gastr_count) %>%
+  drop_na(md_gastr_year, md_gastr_count) %>%
   distinct(county_name, md_gastr_year, .keep_all = TRUE)
-  
-prelim_genint_md_count <- prelim_md_count %>% 
-  pivot_longer(starts_with("md_nf_genintmed"), names_to = "md_genintmed_year", values_to = "md_genintmed_count", names_prefix = "md_nf_genintmed_") %>% 
-  mutate(md_genintmed_year = as.numeric(md_genintmed_year) + 2000) %>% 
-  select(county_name, md_genintmed_year, md_genintmed_count) %>% 
-  drop_na(md_genintmed_year, md_genintmed_count) %>% 
+
+prelim_genint_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_genintmed"), names_to = "md_genintmed_year", values_to = "md_genintmed_count", names_prefix = "md_nf_genintmed_") %>%
+  mutate(md_genintmed_year = as.numeric(md_genintmed_year) + 2000) %>%
+  select(county_name, md_genintmed_year, md_genintmed_count) %>%
+  drop_na(md_genintmed_year, md_genintmed_count) %>%
   distinct(county_name, md_genintmed_year, .keep_all = TRUE)
 
-prelim_surgspec_md_count <- prelim_md_count %>% 
-  pivot_longer(starts_with("md_nf_all_surg_spec"), names_to = "md_surg_spec_year", values_to = "md_surg_spec_count", names_prefix = "md_nf_all_surg_spec_") %>% 
-  mutate(md_surg_spec_year = as.numeric(md_surg_spec_year) + 2000) %>% 
-  select(county_name, md_surg_spec_year, md_surg_spec_count) %>% 
-  drop_na(md_surg_spec_year, md_surg_spec_count) %>% 
+prelim_surgspec_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_all_surg_spec"), names_to = "md_surg_spec_year", values_to = "md_surg_spec_count", names_prefix = "md_nf_all_surg_spec_") %>%
+  mutate(md_surg_spec_year = as.numeric(md_surg_spec_year) + 2000) %>%
+  select(county_name, md_surg_spec_year, md_surg_spec_count) %>%
+  drop_na(md_surg_spec_year, md_surg_spec_count) %>%
   distinct(county_name, md_surg_spec_year, .keep_all = TRUE)
 
-prelim_gensurg_md_count <- prelim_md_count %>% 
-  pivot_longer(starts_with("md_nf_gen_surg"), names_to = "md_gen_surg_year", values_to = "md_gen_surg_count", names_prefix = "md_nf_gen_surg_") %>% 
-  mutate(md_gen_surg_year = as.numeric(md_gen_surg_year) + 2000) %>% 
-  select(county_name, md_gen_surg_year, md_gen_surg_count) %>% 
-  drop_na(md_gen_surg_year, md_gen_surg_count) %>% 
+prelim_gensurg_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_gen_surg"), names_to = "md_gen_surg_year", values_to = "md_gen_surg_count", names_prefix = "md_nf_gen_surg_") %>%
+  mutate(md_gen_surg_year = as.numeric(md_gen_surg_year) + 2000) %>%
+  select(county_name, md_gen_surg_year, md_gen_surg_count) %>%
+  drop_na(md_gen_surg_year, md_gen_surg_count) %>%
   distinct(county_name, md_gen_surg_year, .keep_all = TRUE)
 
-prelim_ob_md_count <- prelim_md_count %>%   
-  pivot_longer(starts_with("md_nf_obgyn_gen"), names_to = "md_obgyn_year", values_to = "md_obgyn_count", names_prefix = "md_nf_obgyn_gen_") %>% 
-  mutate(md_obgyn_year = as.numeric(md_obgyn_year) + 2000) %>% 
-  select(county_name, md_obgyn_year, md_obgyn_count) %>% 
-  drop_na(md_obgyn_year, md_obgyn_count) %>% 
+prelim_ob_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_obgyn_gen"), names_to = "md_obgyn_year", values_to = "md_obgyn_count", names_prefix = "md_nf_obgyn_gen_") %>%
+  mutate(md_obgyn_year = as.numeric(md_obgyn_year) + 2000) %>%
+  select(county_name, md_obgyn_year, md_obgyn_count) %>%
+  drop_na(md_obgyn_year, md_obgyn_count) %>%
   distinct(county_name, md_obgyn_year, .keep_all = TRUE)
 
-prelim_ophth_md_count <- prelim_md_count %>% 
-  pivot_longer(starts_with("md_nf_ophth"), names_to = "md_ophth_year", values_to = "md_ophth_count", names_prefix = "md_nf_ophth_") %>% 
-  mutate(md_ophth_year = as.numeric(md_ophth_year) + 2000) %>% 
-  select(county_name, md_ophth_year, md_ophth_count) %>% 
-  drop_na(md_ophth_year, md_ophth_count) %>% 
+prelim_ophth_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_ophth"), names_to = "md_ophth_year", values_to = "md_ophth_count", names_prefix = "md_nf_ophth_") %>%
+  mutate(md_ophth_year = as.numeric(md_ophth_year) + 2000) %>%
+  select(county_name, md_ophth_year, md_ophth_count) %>%
+  drop_na(md_ophth_year, md_ophth_count) %>%
   distinct(county_name, md_ophth_year, .keep_all = TRUE)
 
-prelim_anesth_md_count <- prelim_md_count %>% 
-  pivot_longer(starts_with("md_nf_anesth"), names_to = "md_anesth_year", values_to = "md_anesth_count", names_prefix = "md_nf_anesth_") %>% 
-  mutate(md_anesth_year = as.numeric(md_anesth_year) + 2000) %>% 
-  select(county_name, md_anesth_year, md_anesth_count) %>% 
-  drop_na(md_anesth_year, md_anesth_count) %>% 
+prelim_anesth_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_anesth"), names_to = "md_anesth_year", values_to = "md_anesth_count", names_prefix = "md_nf_anesth_") %>%
+  mutate(md_anesth_year = as.numeric(md_anesth_year) + 2000) %>%
+  select(county_name, md_anesth_year, md_anesth_count) %>%
+  drop_na(md_anesth_year, md_anesth_count) %>%
   distinct(county_name, md_anesth_year, .keep_all = TRUE)
 
-prelim_emerg_md_count <- prelim_md_count %>% 
-  pivot_longer(starts_with("md_nf_emerg_med"), names_to = "md_emerg_med_year", values_to = "md_emerg_med_count", names_prefix = "md_nf_emerg_med_") %>% 
-  mutate(md_emerg_med_year = as.numeric(md_emerg_med_year) + 2000) %>% 
-  select(county_name, md_emerg_med_year, md_emerg_med_count) %>% 
-  drop_na(md_emerg_med_year, md_emerg_med_count) %>% 
+prelim_emerg_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_emerg_med"), names_to = "md_emerg_med_year", values_to = "md_emerg_med_count", names_prefix = "md_nf_emerg_med_") %>%
+  mutate(md_emerg_med_year = as.numeric(md_emerg_med_year) + 2000) %>%
+  select(county_name, md_emerg_med_year, md_emerg_med_count) %>%
+  drop_na(md_emerg_med_year, md_emerg_med_count) %>%
   distinct(county_name, md_emerg_med_year, .keep_all = TRUE)
 
-prelim_neuro_md_count <- prelim_md_count %>% 
-  pivot_longer(starts_with("md_nf_neuro"), names_to = "md_neuro_year", values_to = "md_neuro_count", names_prefix = "md_nf_neuro_") %>% 
-  mutate(md_neuro_year = as.numeric(md_neuro_year) + 2000) %>% 
-  select(county_name, md_neuro_year, md_neuro_count) %>% 
-  drop_na(md_neuro_year, md_neuro_count) %>% 
+prelim_neuro_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_neuro"), names_to = "md_neuro_year", values_to = "md_neuro_count", names_prefix = "md_nf_neuro_") %>%
+  mutate(md_neuro_year = as.numeric(md_neuro_year) + 2000) %>%
+  select(county_name, md_neuro_year, md_neuro_count) %>%
+  drop_na(md_neuro_year, md_neuro_count) %>%
   distinct(county_name, md_neuro_year, .keep_all = TRUE)
 
 prelim_ped_md_count <- prelim_md_count %>%
@@ -374,282 +291,382 @@ prelim_ped_md_count <- prelim_md_count %>%
   drop_na(md_gen_ped_year, md_gen_ped_count) %>%
   distinct(county_name, md_gen_ped_year, .keep_all = TRUE)
 
-prelim_psych_md_count <- prelim_md_count %>%   
-  pivot_longer(starts_with("md_nf_psych"), names_to = "md_psych_year", values_to = "md_psych_count", names_prefix = "md_nf_psych_") %>% 
+prelim_psych_md_count <- prelim_md_count %>%
+  pivot_longer(starts_with("md_nf_psych"), names_to = "md_psych_year", values_to = "md_psych_count", names_prefix = "md_nf_psych_") %>%
   mutate(md_psych_year = as.numeric(md_psych_year) + 2000) %>%
-  select(county_name, md_psych_year, md_psych_count) %>% 
-  drop_na(md_psych_year, md_psych_count) %>% 
+  select(county_name, md_psych_year, md_psych_count) %>%
+  drop_na(md_psych_year, md_psych_count) %>%
   distinct(county_name, md_psych_year, .keep_all = TRUE)
+
+pop_counts <- prelim_md_count %>% 
+  pivot_longer(starts_with("cens_popn"), names_to = "census_year", values_to = "census_count", names_prefix = "cens_popn_") %>% 
+  mutate(census_year = as.numeric(census_year) + 2000) %>%
+  pivot_longer(starts_with("popn_est"), names_to = "popn_est_year", values_to = "popn_est_count", names_prefix = "popn_est_") %>% 
+  mutate(popn_est_year = as.numeric(popn_est_year) + 2000) %>% 
+  select(county_name, census_year, census_count, popn_est_year, popn_est_count) %>% 
+  drop_na(census_year, census_count, popn_est_year, popn_est_count) %>% 
+  distinct(county_name, census_year, popn_est_year, .keep_all = TRUE)
 ```
 
 ```{r bind-md-counts, warning = FALSE, message = FALSE}
-md_counts <- prelim_allergy_md_count %>% 
-  bind_cols(prelim_anesth_md_count) %>% 
-  bind_cols(prelim_card_md_count) %>% 
-  bind_cols(prelim_derm_md_count) %>% 
-  bind_cols(prelim_emerg_md_count) %>% 
-  bind_cols(prelim_fammed_md_count) %>% 
-  bind_cols(prelim_gastr_md_count) %>% 
-  bind_cols(prelim_genint_md_count) %>% 
-  bind_cols(prelim_gensurg_md_count) %>% 
-  bind_cols(prelim_neuro_md_count) %>% 
-  bind_cols(prelim_ob_md_count) %>% 
-  bind_cols(prelim_ophth_md_count) %>% 
-  bind_cols(prelim_psych_md_count) %>% 
-  bind_cols(prelim_spec_md_count) %>% 
-  bind_cols(prelim_surgspec_md_count) %>% 
-  bind_cols(prelim_all_md_count) %>% 
-  bind_cols(prelim_child_psych_md_count) %>% 
-  bind_cols(prelim_ped_md_count) %>% 
-  select(county_name...1, md_allergy_year, md_allergy_count, md_anesth_count, md_card_count, md_derm_count, md_emerg_med_count, md_fammed_count,  md_gastr_count, md_genintmed_count, md_gen_surg_count, md_neuro_count, md_obgyn_count, md_ophth_count, md_psych_count, md_spec_count, md_surg_spec_count, all_gp_md_count, md_child_psych_count, md_gen_ped_count) %>% 
+md_counts <- prelim_allergy_md_count %>%
+  bind_cols(prelim_anesth_md_count) %>%
+  bind_cols(prelim_card_md_count) %>%
+  bind_cols(prelim_derm_md_count) %>%
+  bind_cols(prelim_emerg_md_count) %>%
+  bind_cols(prelim_fammed_md_count) %>%
+  bind_cols(prelim_gastr_md_count) %>%
+  bind_cols(prelim_genint_md_count) %>%
+  bind_cols(prelim_gensurg_md_count) %>%
+  bind_cols(prelim_neuro_md_count) %>%
+  bind_cols(prelim_ob_md_count) %>%
+  bind_cols(prelim_ophth_md_count) %>%
+  bind_cols(prelim_psych_md_count) %>%
+  bind_cols(prelim_spec_md_count) %>%
+  bind_cols(prelim_surgspec_md_count) %>%
+  bind_cols(prelim_all_md_count) %>%
+  bind_cols(prelim_child_psych_md_count) %>%
+  bind_cols(prelim_ped_md_count) %>%
+  select(county_name...1, md_allergy_year, md_allergy_count, md_anesth_count, md_card_count, md_derm_count, md_emerg_med_count, md_fammed_count,  md_gastr_count, md_genintmed_count, md_gen_surg_count, md_neuro_count, md_obgyn_count, md_ophth_count, md_psych_count, md_spec_count, md_surg_spec_count, all_gp_md_count, md_child_psych_count, md_gen_ped_count) %>%
   rename(county_name = county_name...1,
-         count_year = md_allergy_year)
+         md_count_year = md_allergy_year)
+
+md_counts <- md_counts %>% 
+  left_join(pop_counts) %>% 
+  distinct(county_name, md_count_year, census_year, census_count, popn_est_year, popn_est_count, .keep_all = TRUE)
+
+write_csv(md_counts, "~/Desktop/GitHub/data_science_2/data/md_counts.csv")
 ```
 
 ```{r do-counts-select}
-prelim_do_count <- ahrf_2019_2023 %>% 
+prelim_do_count <- ahrf_2019_2023 %>%
   select(county_name, do_nf_gp_21, do_nf_gp_20,	do_nf_gp_19, do_nf_gp_18,	do_nf_gp_15, do_nf_gp_10, do_nf_fammed_gen_21,	do_nf_fammed_gen_20,	do_nf_fammed_gen_19, do_nf_fammed_gen_18, do_nf_fammed_gen_15, do_nf_fammed_gen_10, do_nf_ped_gen_21,	do_nf_ped_gen_20,	do_nf_ped_gen_19,	do_nf_ped_gen_18,	do_nf_ped_gen_15,	do_nf_ped_gen_10, do_nf_obgyn_gen_21,	do_nf_obgyn_gen_20,	do_nf_obgyn_gen_19,	do_nf_obgyn_gen_18,	do_nf_obgyn_gen_15,	do_nf_obgyn_gen_10, do_nf_gen_surg_21, do_nf_gen_surg_20,	do_nf_gen_surg_19,	do_nf_gen_surg_18,	do_nf_gen_surg_15, do_nf_gen_surg_10, do_nf_emerg_med_21,	do_nf_emerg_med_20,	do_nf_emerg_med_19,	do_nf_emerg_med_18,	do_nf_emerg_med_15,	do_nf_emerg_med_10, do_nf_psych_21,	do_nf_psych_20,	do_nf_psych_19,	do_nf_psych_18,	do_nf_psych_15,	do_nf_psych_10, do_nf_oth_spec_21, do_nf_oth_spec_20,	do_nf_oth_spec_19, do_nf_oth_spec_18,	do_nf_oth_spec_15, do_nf_oth_spec_10)
 ```
 
 ```{r do-counts-pivots}
-prelim_do_gp <- prelim_do_count %>% 
-  pivot_longer(starts_with("do_nf_gp"), names_to = "do_gp_year", values_to = "do_gp_count", names_prefix = "do_nf_gp_") %>% 
-  mutate(do_gp_year = as.numeric(do_gp_year) + 2000) %>% 
-  select(county_name, do_gp_year, do_gp_count) %>% 
-  drop_na(do_gp_year, do_gp_count) %>% 
+prelim_do_gp <- prelim_do_count %>%
+  pivot_longer(starts_with("do_nf_gp"), names_to = "do_gp_year", values_to = "do_gp_count", names_prefix = "do_nf_gp_") %>%
+  mutate(do_gp_year = as.numeric(do_gp_year) + 2000) %>%
+  select(county_name, do_gp_year, do_gp_count) %>%
+  drop_na(do_gp_year, do_gp_count) %>%
   distinct(county_name, do_gp_year, .keep_all = TRUE)
 
-prelim_do_fammed <- prelim_do_count %>% 
-  pivot_longer(starts_with("do_nf_fammed_gen"), names_to = "do_fammed_year", values_to = "do_fammed_count", names_prefix = "do_nf_fammed_gen_") %>% 
-  mutate(do_fammed_year = as.numeric(do_fammed_year) + 2000) %>% 
-  select(county_name, do_fammed_year, do_fammed_count) %>% 
-  drop_na(do_fammed_year, do_fammed_count) %>% 
+prelim_do_fammed <- prelim_do_count %>%
+  pivot_longer(starts_with("do_nf_fammed_gen"), names_to = "do_fammed_year", values_to = "do_fammed_count", names_prefix = "do_nf_fammed_gen_") %>%
+  mutate(do_fammed_year = as.numeric(do_fammed_year) + 2000) %>%
+  select(county_name, do_fammed_year, do_fammed_count) %>%
+  drop_na(do_fammed_year, do_fammed_count) %>%
   distinct(county_name, do_fammed_year, .keep_all = TRUE)
 
-prelim_do_ped <- prelim_do_count %>% 
-  pivot_longer(starts_with("do_nf_ped_gen"), names_to = "do_ped_year", values_to = "do_ped_count", names_prefix = "do_nf_ped_gen_") %>% 
-  mutate(do_ped_year = as.numeric(do_ped_year) + 2000) %>% 
-  select(county_name, do_ped_year, do_ped_count) %>% 
-  drop_na(do_ped_year, do_ped_count) %>% 
+prelim_do_ped <- prelim_do_count %>%
+  pivot_longer(starts_with("do_nf_ped_gen"), names_to = "do_ped_year", values_to = "do_ped_count", names_prefix = "do_nf_ped_gen_") %>%
+  mutate(do_ped_year = as.numeric(do_ped_year) + 2000) %>%
+  select(county_name, do_ped_year, do_ped_count) %>%
+  drop_na(do_ped_year, do_ped_count) %>%
   distinct(county_name, do_ped_year, .keep_all = TRUE)
 
-prelim_do_obgyn <- prelim_do_count %>% 
-  pivot_longer(starts_with("do_nf_obgyn_gen"), names_to = "do_obgyn_year", values_to = "do_obgyn_count", names_prefix = "do_nf_obgyn_gen_") %>% 
-  mutate(do_obgyn_year = as.numeric(do_obgyn_year) + 2000) %>% 
-  select(county_name, do_obgyn_year, do_obgyn_count) %>% 
-  drop_na(do_obgyn_year, do_obgyn_count) %>% 
+prelim_do_obgyn <- prelim_do_count %>%
+  pivot_longer(starts_with("do_nf_obgyn_gen"), names_to = "do_obgyn_year", values_to = "do_obgyn_count", names_prefix = "do_nf_obgyn_gen_") %>%
+  mutate(do_obgyn_year = as.numeric(do_obgyn_year) + 2000) %>%
+  select(county_name, do_obgyn_year, do_obgyn_count) %>%
+  drop_na(do_obgyn_year, do_obgyn_count) %>%
   distinct(county_name, do_obgyn_year, .keep_all = TRUE)
 
-prelim_do_gen_surg <- prelim_do_count %>% 
-  pivot_longer(starts_with("do_nf_gen_surg"), names_to = "do_gen_surg_year", values_to = "do_gen_surg_count", names_prefix = "do_nf_gen_surg_") %>% 
-  mutate(do_gen_surg_year = as.numeric(do_gen_surg_year) + 2000) %>% 
-  select(county_name, do_gen_surg_year, do_gen_surg_count) %>% 
-  drop_na(do_gen_surg_year, do_gen_surg_count) %>% 
+prelim_do_gen_surg <- prelim_do_count %>%
+  pivot_longer(starts_with("do_nf_gen_surg"), names_to = "do_gen_surg_year", values_to = "do_gen_surg_count", names_prefix = "do_nf_gen_surg_") %>%
+  mutate(do_gen_surg_year = as.numeric(do_gen_surg_year) + 2000) %>%
+  select(county_name, do_gen_surg_year, do_gen_surg_count) %>%
+  drop_na(do_gen_surg_year, do_gen_surg_count) %>%
   distinct(county_name, do_gen_surg_year, .keep_all = TRUE)
 
-prelim_do_emerg_med <- prelim_do_count %>% 
-  pivot_longer(starts_with("do_nf_emerg_med"), names_to = "do_emerg_med_year", values_to = "do_emerg_med_count", names_prefix = "do_nf_emerg_med_") %>% 
-  mutate(do_emerg_med_year = as.numeric(do_emerg_med_year) + 2000) %>% 
-  select(county_name, do_emerg_med_year, do_emerg_med_count) %>% 
-  drop_na(do_emerg_med_year, do_emerg_med_count) %>% 
+prelim_do_emerg_med <- prelim_do_count %>%
+  pivot_longer(starts_with("do_nf_emerg_med"), names_to = "do_emerg_med_year", values_to = "do_emerg_med_count", names_prefix = "do_nf_emerg_med_") %>%
+  mutate(do_emerg_med_year = as.numeric(do_emerg_med_year) + 2000) %>%
+  select(county_name, do_emerg_med_year, do_emerg_med_count) %>%
+  drop_na(do_emerg_med_year, do_emerg_med_count) %>%
   distinct(county_name, do_emerg_med_year, .keep_all = TRUE)
 
-prelim_do_psych <- prelim_do_count %>% 
-  pivot_longer(starts_with("do_nf_psych"), names_to = "do_psych_year", values_to = "do_psych_count", names_prefix = "do_nf_psych_") %>% 
-  mutate(do_psych_year = as.numeric(do_psych_year) + 2000) %>% 
-  select(county_name, do_psych_year, do_psych_count) %>% 
-  drop_na(do_psych_year, do_psych_count) %>% 
+prelim_do_psych <- prelim_do_count %>%
+  pivot_longer(starts_with("do_nf_psych"), names_to = "do_psych_year", values_to = "do_psych_count", names_prefix = "do_nf_psych_") %>%
+  mutate(do_psych_year = as.numeric(do_psych_year) + 2000) %>%
+  select(county_name, do_psych_year, do_psych_count) %>%
+  drop_na(do_psych_year, do_psych_count) %>%
   distinct(county_name, do_psych_year, .keep_all = TRUE)
 
-prelim_do_oth_spec <- prelim_do_count %>% 
-  pivot_longer(starts_with("do_nf_oth_spec"), names_to = "do_oth_spec_year", values_to = "do_oth_spec_count", names_prefix = "do_nf_oth_spec_") %>% 
-  mutate(do_oth_spec_year = as.numeric(do_oth_spec_year) + 2000) %>% 
-  select(county_name, do_oth_spec_year, do_oth_spec_count) %>% 
-  drop_na(do_oth_spec_year, do_oth_spec_count) %>% 
+prelim_do_oth_spec <- prelim_do_count %>%
+  pivot_longer(starts_with("do_nf_oth_spec"), names_to = "do_oth_spec_year", values_to = "do_oth_spec_count", names_prefix = "do_nf_oth_spec_") %>%
+  mutate(do_oth_spec_year = as.numeric(do_oth_spec_year) + 2000) %>%
+  select(county_name, do_oth_spec_year, do_oth_spec_count) %>%
+  drop_na(do_oth_spec_year, do_oth_spec_count) %>%
   distinct(county_name, do_oth_spec_year, .keep_all = TRUE)
 ```
 
 ```{r bind-do-counts, message = FALSE}
-do_counts <- prelim_do_gp %>% 
-  bind_cols(prelim_do_fammed) %>% 
-  bind_cols(prelim_do_ped) %>% 
-  bind_cols(prelim_do_obgyn) %>% 
-  bind_cols(prelim_do_gen_surg) %>% 
-  bind_cols(prelim_do_emerg_med) %>% 
-  bind_cols(prelim_do_psych) %>% 
-  bind_cols(prelim_do_oth_spec) %>% 
-  select(county_name...1, do_gp_year, do_fammed_count, do_ped_count, do_obgyn_count, do_gen_surg_count, do_emerg_med_count, do_psych_count, do_oth_spec_count) %>% 
+do_counts <- prelim_do_gp %>%
+  bind_cols(prelim_do_fammed) %>%
+  bind_cols(prelim_do_ped) %>%
+  bind_cols(prelim_do_obgyn) %>%
+  bind_cols(prelim_do_gen_surg) %>%
+  bind_cols(prelim_do_emerg_med) %>%
+  bind_cols(prelim_do_psych) %>%
+  bind_cols(prelim_do_oth_spec) %>%
+  select(county_name...1, do_gp_year, do_fammed_count, do_ped_count, do_obgyn_count, do_gen_surg_count, do_emerg_med_count, do_psych_count, do_oth_spec_count) %>%
   rename(county_name = county_name...1,
-         count_year = do_gp_year)
+         do_count_year = do_gp_year)
+
+write_csv(do_counts, "~/Desktop/GitHub/data_science_2/data/do_counts.csv")
 ```
 
-```{r bind-provider-counts, message = FALSE}
+```{r join-provider-counts, message = FALSE}
 all_physicians <- md_counts %>% 
-  bind_cols(do_counts) %>% 
-  select(county_name...1, count_year...2, md_allergy_count, md_anesth_count, md_card_count, md_derm_count, md_emerg_med_count, md_fammed_count,  md_gastr_count, md_genintmed_count, md_gen_surg_count, md_neuro_count, md_obgyn_count, md_ophth_count, md_psych_count, md_spec_count, md_surg_spec_count, all_gp_md_count, md_child_psych_count, md_gen_ped_count, do_fammed_count, do_ped_count, do_obgyn_count, do_gen_surg_count, do_emerg_med_count, do_psych_count, do_oth_spec_count) %>% 
-  rename(county_name = county_name...1,
-         count_year = count_year...2)
+  left_join(do_counts) %>% 
+  select(county_name, md_count_year, md_allergy_count, md_anesth_count, md_card_count, md_derm_count, md_emerg_med_count, md_fammed_count,  md_gastr_count, md_genintmed_count, md_gen_surg_count, md_neuro_count, md_obgyn_count, md_ophth_count, md_psych_count, md_spec_count, md_surg_spec_count, all_gp_md_count, md_child_psych_count, md_gen_ped_count, do_fammed_count, do_ped_count, do_obgyn_count, do_gen_surg_count, do_emerg_med_count, do_psych_count, do_oth_spec_count, census_year, census_count, popn_est_year, popn_est_count) %>% 
+  rename(physician_count_year = md_count_year) %>% 
+  distinct(county_name, physician_count_year, census_year, census_count, popn_est_year, popn_est_count, .keep_all = TRUE)
+
+write_csv(all_physicians, "~/Desktop/GitHub/data_science_2/data/all_physicians.csv")
 ```
 
 ```{r hosp-data}
-prelim_hosp_data <- ahrf_2022_2023 %>% 
+prelim_hosp_data <- ahrf_2022_2023 %>%
   select(cnty_name, hosp_adm_21, hosp_adm_20, stgh_hosp_adm_21, stgh_hosp_adm_20, stnglth_hosp_adm_21, stnglth_hosp_adm_20, sth_comn_hosp_adm_21, sth_comn_hosp_adm_20, hosp_21, hosp_20, stgh_21, stgh_20, lth_21, lth_20, sth_psych_21, sth_psych_20, sth_child_med_21, sth_child_med_20, sth_child_psych_21, sth_child_psych_20, lth_psych_21, lth_psych_20, lth_child_psych_21, lth_child_psych_20, sth_comn_21, sth_comn_20, vetn_hosp_21, vetn_hosp_20, stgh_critcl_access_21, stgh_critcl_access_20, sole_comn_provdrs_21, sole_comn_provdrs_20)
 ```
 
-```{r hosp-adm-data-pivots, warning = FALSE, message = FALSE}
-hosp_adm <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("hosp_adm"), names_to = "hosp_adm_year", values_to = "hosp_adm_count", names_prefix = "hosp_adm_") %>% 
-  mutate(hosp_adm_year = as.numeric(hosp_adm_year) + 2000) %>% 
-  select(cnty_name, hosp_adm_year, hosp_adm_count) %>% 
-  drop_na(hosp_adm_year, hosp_adm_count) %>% 
-  distinct(cnty_name, hosp_adm_year, .keep_all = TRUE)
-
-stgh_hosp_adm <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("stgh_hosp_adm"), names_to = "stgh_hosp_year", values_to = "stgh_hosp_count", names_prefix = "stgh_hosp_adm_") %>% 
-  mutate(stgh_hosp_year = as.numeric(stgh_hosp_year) + 2000) %>% 
-  select(cnty_name, stgh_hosp_year, stgh_hosp_count) %>% 
-  drop_na(stgh_hosp_year, stgh_hosp_count) %>% 
-  distinct(cnty_name, stgh_hosp_year, .keep_all = TRUE)
-
-stnglth_hosp_adm <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("stnglth_hosp_adm"), names_to = "stnglth_hosp_year", values_to = "stnglth_hosp_count", names_prefix = "stnglth_hosp_adm_") %>% 
-  mutate(stnglth_hosp_year = as.numeric(stnglth_hosp_year) + 2000) %>% 
-  select(cnty_name, stnglth_hosp_year, stnglth_hosp_count) %>% 
-  drop_na(stnglth_hosp_year, stnglth_hosp_count) %>% 
-  distinct(cnty_name, stnglth_hosp_year, .keep_all = TRUE)
-
-sth_comn_hosp_adm <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("sth_comn_hosp_adm"), names_to = "sth_comn_hosp_year", values_to = "sth_comn_hosp_count", names_prefix = "sth_comn_hosp_adm_") %>% 
-  mutate(sth_comn_hosp_year = as.numeric(sth_comn_hosp_year) + 2000) %>% 
-  select(cnty_name, sth_comn_hosp_year, sth_comn_hosp_count) %>% 
-  drop_na(sth_comn_hosp_year, sth_comn_hosp_count) %>% 
-  distinct(cnty_name, sth_comn_hosp_year, .keep_all = TRUE)
-```
-
 ```{r hosp-data-pivots, warning = FALSE, message = FALSE}
-hosp <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("hosp"), names_to = "hosp_year", values_to = "hosp_count", names_prefix = "hosp_") %>% 
-  mutate(hosp_year = as.numeric(hosp_year) + 2000) %>% 
-  select(cnty_name, hosp_year, hosp_count) %>% 
-  drop_na(hosp_year, hosp_count) %>% 
+hosp <- prelim_hosp_data %>%
+  pivot_longer(starts_with("hosp"), names_to = "hosp_year", values_to = "hosp_count", names_prefix = "hosp_") %>%
+  mutate(hosp_year = as.numeric(hosp_year) + 2000) %>%
+  select(cnty_name, hosp_year, hosp_count) %>%
+  drop_na(hosp_year, hosp_count) %>%
   distinct(cnty_name, hosp_year, hosp_count, .keep_all = TRUE)
 
-stgh <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("stgh"), names_to = "stgh_year", values_to = "stgh_count", names_prefix = "stgh_") %>% 
-  mutate(stgh_year = as.numeric(stgh_year) + 2000) %>% 
-  select(cnty_name, stgh_year, stgh_count) %>% 
-  drop_na(stgh_year, stgh_count) %>% 
+stgh <- prelim_hosp_data %>%
+  pivot_longer(starts_with("stgh"), names_to = "stgh_year", values_to = "stgh_count", names_prefix = "stgh_") %>%
+  mutate(stgh_year = as.numeric(stgh_year) + 2000) %>%
+  select(cnty_name, stgh_year, stgh_count) %>%
+  drop_na(stgh_year, stgh_count) %>%
   distinct(cnty_name, stgh_year, stgh_count, .keep_all = TRUE)
 
-lth <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("lth"), names_to = "lth_year", values_to = "lth_count", names_prefix = "lth_") %>% 
-  mutate(lth_year = as.numeric(lth_year) + 2000) %>% 
-  select(cnty_name, lth_year, lth_count) %>% 
-  drop_na(lth_year, lth_count) %>% 
+lth <- prelim_hosp_data %>%
+  pivot_longer(starts_with("lth"), names_to = "lth_year", values_to = "lth_count", names_prefix = "lth_") %>%
+  mutate(lth_year = as.numeric(lth_year) + 2000) %>%
+  select(cnty_name, lth_year, lth_count) %>%
+  drop_na(lth_year, lth_count) %>%
   distinct(cnty_name, lth_year, lth_count, .keep_all = TRUE)
 
-sth_psych <- prelim_hosp_data %>% 
+sth_psych <- prelim_hosp_data %>%
   pivot_longer(starts_with("sth_psych"), names_to = "sth_psych_year", values_to = "sth_psych_count", names_prefix = "sth_psych_") %>%
-  mutate(sth_psych_year = as.numeric(sth_psych_year) + 2000) %>% 
-  select(cnty_name, sth_psych_year, sth_psych_count) %>% 
-  drop_na(sth_psych_year, sth_psych_count) %>% 
+  mutate(sth_psych_year = as.numeric(sth_psych_year) + 2000) %>%
+  select(cnty_name, sth_psych_year, sth_psych_count) %>%
+  drop_na(sth_psych_year, sth_psych_count) %>%
   distinct(cnty_name, sth_psych_year, sth_psych_count, .keep_all = TRUE)
 
-sth_child_med <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("sth_child_med"), names_to = "sth_child_med_year", values_to = "sth_child_med_count", names_prefix = "sth_child_med_") %>% 
-  mutate(sth_child_med_year = as.numeric(sth_child_med_year) + 2000) %>% 
-  select(cnty_name, sth_child_med_year, sth_child_med_count) %>% 
-  drop_na(sth_child_med_year, sth_child_med_count) %>% 
+sth_child_med <- prelim_hosp_data %>%
+  pivot_longer(starts_with("sth_child_med"), names_to = "sth_child_med_year", values_to = "sth_child_med_count", names_prefix = "sth_child_med_") %>%
+  mutate(sth_child_med_year = as.numeric(sth_child_med_year) + 2000) %>%
+  select(cnty_name, sth_child_med_year, sth_child_med_count) %>%
+  drop_na(sth_child_med_year, sth_child_med_count) %>%
   distinct(cnty_name, sth_child_med_year, sth_child_med_count, .keep_all = TRUE)
 
-sth_child_psych <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("sth_child_psych"), names_to = "sth_child_psych_year", values_to = "sth_child_psych_count", names_prefix = "sth_child_psych_") %>% 
-  mutate(sth_child_psych_year = as.numeric(sth_child_psych_year) + 2000) %>% 
-  select(cnty_name, sth_child_psych_year, sth_child_psych_count) %>% 
-  drop_na(sth_child_psych_year, sth_child_psych_count) %>% 
+sth_child_psych <- prelim_hosp_data %>%
+  pivot_longer(starts_with("sth_child_psych"), names_to = "sth_child_psych_year", values_to = "sth_child_psych_count", names_prefix = "sth_child_psych_") %>%
+  mutate(sth_child_psych_year = as.numeric(sth_child_psych_year) + 2000) %>%
+  select(cnty_name, sth_child_psych_year, sth_child_psych_count) %>%
+  drop_na(sth_child_psych_year, sth_child_psych_count) %>%
   distinct(cnty_name, sth_child_psych_year, sth_child_psych_count, .keep_all = TRUE)
 
-lth_psych <- prelim_hosp_data %>% 
+lth_psych <- prelim_hosp_data %>%
   pivot_longer(starts_with("lth_psych"), names_to = "lth_psych_year", values_to = "lth_psych_count", names_prefix = "lth_psych_") %>%
   mutate(lth_psych_year = as.numeric(lth_psych_year) + 2000) %>%
-  select(cnty_name, lth_psych_year, lth_psych_count) %>% 
-  drop_na(lth_psych_year, lth_psych_count) %>% 
+  select(cnty_name, lth_psych_year, lth_psych_count) %>%
+  drop_na(lth_psych_year, lth_psych_count) %>%
   distinct(cnty_name, lth_psych_year, lth_psych_count, .keep_all = TRUE)
 
-lth_child_psych <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("lth_child_psych"), names_to = "lth_child_psych_year", values_to = "lth_child_psych_count", names_prefix = "lth_child_psych_") %>% 
-  mutate(lth_child_psych_year = as.numeric(lth_child_psych_year) + 2000) %>% 
-  select(cnty_name, lth_child_psych_year, lth_child_psych_count) %>% 
-  drop_na(lth_child_psych_year, lth_child_psych_count) %>% 
+lth_child_psych <- prelim_hosp_data %>%
+  pivot_longer(starts_with("lth_child_psych"), names_to = "lth_child_psych_year", values_to = "lth_child_psych_count", names_prefix = "lth_child_psych_") %>%
+  mutate(lth_child_psych_year = as.numeric(lth_child_psych_year) + 2000) %>%
+  select(cnty_name, lth_child_psych_year, lth_child_psych_count) %>%
+  drop_na(lth_child_psych_year, lth_child_psych_count) %>%
   distinct(cnty_name, lth_child_psych_year, lth_child_psych_count, .keep_all = TRUE)
 
-sth_comn <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("sth_comn"), names_to = "sth_comn_year", values_to = "sth_comn_count", names_prefix = "sth_comn_") %>% 
-  mutate(sth_comn_year = as.numeric(sth_comn_year) + 2000) %>% 
-  select(cnty_name, sth_comn_year, sth_comn_count) %>% 
-  drop_na(sth_comn_year, sth_comn_count) %>% 
+sth_comn <- prelim_hosp_data %>%
+  pivot_longer(starts_with("sth_comn"), names_to = "sth_comn_year", values_to = "sth_comn_count", names_prefix = "sth_comn_") %>%
+  mutate(sth_comn_year = as.numeric(sth_comn_year) + 2000) %>%
+  select(cnty_name, sth_comn_year, sth_comn_count) %>%
+  drop_na(sth_comn_year, sth_comn_count) %>%
   distinct(cnty_name, sth_comn_year, sth_comn_count, .keep_all = TRUE)
 
-vetn_hosp <- prelim_hosp_data %>% 
+vetn_hosp <- prelim_hosp_data %>%
   pivot_longer(starts_with("vetn_hosp"), names_to = "vetn_hosp_year", values_to = "vetn_hosp_count", names_prefix = "vetn_hosp_") %>%
-  mutate(vetn_hosp_year = as.numeric(vetn_hosp_year) + 2000) %>% 
-  select(cnty_name, vetn_hosp_year, vetn_hosp_count) %>% 
-  drop_na(vetn_hosp_year, vetn_hosp_count) %>% 
+  mutate(vetn_hosp_year = as.numeric(vetn_hosp_year) + 2000) %>%
+  select(cnty_name, vetn_hosp_year, vetn_hosp_count) %>%
+  drop_na(vetn_hosp_year, vetn_hosp_count) %>%
   distinct(cnty_name, vetn_hosp_year, vetn_hosp_count)
 
-stgh_critcl_access <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("stgh_critcl_access"), names_to = "stgh_critcl_access_year", values_to = "stgh_critcl_access_count", names_prefix = "stgh_critcl_access_") %>% 
-  mutate(stgh_critcl_access_year = as.numeric(stgh_critcl_access_year) + 2000) %>% 
-  select(cnty_name, stgh_critcl_access_year, stgh_critcl_access_count) %>% 
-  drop_na(stgh_critcl_access_year, stgh_critcl_access_count) %>% 
+stgh_critcl_access <- prelim_hosp_data %>%
+  pivot_longer(starts_with("stgh_critcl_access"), names_to = "stgh_critcl_access_year", values_to = "stgh_critcl_access_count", names_prefix = "stgh_critcl_access_") %>%
+  mutate(stgh_critcl_access_year = as.numeric(stgh_critcl_access_year) + 2000) %>%
+  select(cnty_name, stgh_critcl_access_year, stgh_critcl_access_count) %>%
+  drop_na(stgh_critcl_access_year, stgh_critcl_access_count) %>%
   distinct(cnty_name, stgh_critcl_access_year, stgh_critcl_access_count, .keep_all = TRUE)
 
-sole_comn_provdrs <- prelim_hosp_data %>% 
-  pivot_longer(starts_with("sole_comn_provdrs"), names_to = "sole_comn_provdrs_year", values_to = "sole_comn_provdrs_count", names_prefix = "sole_comn_provdrs_") %>% 
-  mutate(sole_comn_provdrs_year = as.numeric(sole_comn_provdrs_year) + 2000) %>% 
-  select(cnty_name, sole_comn_provdrs_year, sole_comn_provdrs_count) %>% 
-  drop_na(sole_comn_provdrs_year, sole_comn_provdrs_count) %>% 
+sole_comn_provdrs <- prelim_hosp_data %>%
+  pivot_longer(starts_with("sole_comn_provdrs"), names_to = "sole_comn_provdrs_year", values_to = "sole_comn_provdrs_count", names_prefix = "sole_comn_provdrs_") %>%
+  mutate(sole_comn_provdrs_year = as.numeric(sole_comn_provdrs_year) + 2000) %>%
+  select(cnty_name, sole_comn_provdrs_year, sole_comn_provdrs_count) %>%
+  drop_na(sole_comn_provdrs_year, sole_comn_provdrs_count) %>%
   distinct(cnty_name, sole_comn_provdrs_year, sole_comn_provdrs_count)
 ```
 
-```{r hosp-adm-data-bind, warning = FALSE, message = FALSE}
-hosp_adm_data <- hosp_adm %>% 
-  bind_cols(stgh_hosp_adm) %>% 
-  bind_cols(stnglth_hosp_adm) %>% 
-  bind_cols(sth_comn_hosp_adm) %>% 
-  select(cnty_name...1, hosp_adm_year, hosp_adm_count, stgh_hosp_count, stnglth_hosp_count, sth_comn_hosp_count) %>% 
-  rename(county_name = cnty_name...1,
-         count_year = hosp_adm_year)
-```
-
 ```{r hosp-data-bind, warning = FALSE, message = FALSE}
-hosp_data <- hosp %>% 
-  bind_cols(stgh) %>% 
-  bind_cols(lth) %>% 
-  bind_cols(sth_psych) %>% 
-  bind_cols(sth_child_med) %>% 
-  bind_cols(sth_child_psych) %>% 
-  bind_cols(lth_psych) %>% 
-  bind_cols(lth_child_psych) %>% 
-  bind_cols(sth_comn) %>% 
-  bind_cols(vetn_hosp) %>% 
-  bind_cols(stgh_critcl_access) %>% 
-  bind_cols(sole_comn_provdrs) %>% 
-  select(cnty_name...1, hosp_year, hosp_count, stgh_count, lth_count, sth_psych_count, sth_child_med_count, sth_child_psych_count, lth_psych_count, lth_child_psych_count, sth_comn_count, vetn_hosp_count, stgh_critcl_access_count, sole_comn_provdrs_count) %>% 
-  rename(county_name = cnty_name...1, 
-         count_year = hosp_year)
-                     
+hosp_data <- hosp %>%
+  bind_cols(stgh) %>%
+  bind_cols(lth) %>%
+  bind_cols(sth_psych) %>%
+  bind_cols(sth_child_med) %>%
+  bind_cols(sth_child_psych) %>%
+  bind_cols(lth_psych) %>%
+  bind_cols(lth_child_psych) %>%
+  bind_cols(sth_comn) %>%
+  bind_cols(vetn_hosp) %>%
+  bind_cols(stgh_critcl_access) %>%
+  bind_cols(sole_comn_provdrs) %>%
+  select(cnty_name...1, hosp_year, hosp_count, stgh_count, lth_count, sth_psych_count, sth_child_med_count, sth_child_psych_count, lth_psych_count, lth_child_psych_count, sth_comn_count, vetn_hosp_count, stgh_critcl_access_count, sole_comn_provdrs_count) %>%
+  rename(county_name = cnty_name...1,
+         hosp_count_year = hosp_year)
+
+hosp_data <- hosp_data %>% 
+  left_join(pop_counts)
+
+write_csv(hosp_data, "~/Desktop/GitHub/data_science_2/data/hosp_data.csv")
 ```
 
+```{r hosp-admissions}
+hospital_admissions <- ahrf_2022_2023 %>%
+  select(cnty_name, hosp_adm_21, hosp_adm_20, stgh_hosp_adm_21, stgh_hosp_adm_20, stnglth_hosp_adm_21, stnglth_hosp_adm_20, sth_comn_hosp_adm_21, sth_comn_hosp_adm_20)
+```
+
+```{r hosp-adm-data-pivots, warning = FALSE, message = FALSE}
+hosp_adm <- prelim_hosp_data %>%
+  pivot_longer(starts_with("hosp_adm"), names_to = "hosp_adm_year", values_to = "hosp_adm_count", names_prefix = "hosp_adm_") %>%
+  mutate(hosp_adm_year = as.numeric(hosp_adm_year) + 2000) %>%
+  select(cnty_name, hosp_adm_year, hosp_adm_count) %>%
+  drop_na(hosp_adm_year, hosp_adm_count) %>%
+  distinct(cnty_name, hosp_adm_year, .keep_all = TRUE)
+
+stgh_hosp_adm <- prelim_hosp_data %>%
+  pivot_longer(starts_with("stgh_hosp_adm"), names_to = "stgh_hosp_year", values_to = "stgh_hosp_count", names_prefix = "stgh_hosp_adm_") %>%
+  mutate(stgh_hosp_year = as.numeric(stgh_hosp_year) + 2000) %>%
+  select(cnty_name, stgh_hosp_year, stgh_hosp_count) %>%
+  drop_na(stgh_hosp_year, stgh_hosp_count) %>%
+  distinct(cnty_name, stgh_hosp_year, .keep_all = TRUE)
+
+stnglth_hosp_adm <- prelim_hosp_data %>%
+  pivot_longer(starts_with("stnglth_hosp_adm"), names_to = "stnglth_hosp_year", values_to = "stnglth_hosp_count", names_prefix = "stnglth_hosp_adm_") %>%
+  mutate(stnglth_hosp_year = as.numeric(stnglth_hosp_year) + 2000) %>%
+  select(cnty_name, stnglth_hosp_year, stnglth_hosp_count) %>%
+  drop_na(stnglth_hosp_year, stnglth_hosp_count) %>%
+  distinct(cnty_name, stnglth_hosp_year, .keep_all = TRUE)
+
+sth_comn_hosp_adm <- prelim_hosp_data %>%
+  pivot_longer(starts_with("sth_comn_hosp_adm"), names_to = "sth_comn_hosp_year", values_to = "sth_comn_hosp_count", names_prefix = "sth_comn_hosp_adm_") %>%
+  mutate(sth_comn_hosp_year = as.numeric(sth_comn_hosp_year) + 2000) %>%
+  select(cnty_name, sth_comn_hosp_year, sth_comn_hosp_count) %>%
+  drop_na(sth_comn_hosp_year, sth_comn_hosp_count) %>%
+  distinct(cnty_name, sth_comn_hosp_year, .keep_all = TRUE)
+```
+
+```{r hosp-adm-data-bind, warning = FALSE, message = FALSE}
+hosp_adm_data <- hosp_adm %>%
+  bind_cols(stgh_hosp_adm) %>%
+  bind_cols(stnglth_hosp_adm) %>%
+  bind_cols(sth_comn_hosp_adm) %>%
+  select(cnty_name...1, hosp_adm_year, hosp_adm_count, stgh_hosp_count, stnglth_hosp_count, sth_comn_hosp_count) %>%
+  rename(county_name = cnty_name...1,
+         hosp_adm_count_year = hosp_adm_year)
+
+hosp_adm_data <- hosp_adm_data %>% 
+  left_join(pop_counts)
+
+write_csv(hosp_adm_data, "~/Desktop/GitHub/data_science_2/data/hosp_adm_data.csv")
+```
 
 ```{r hosp-care-data}
-hosp_care_types <- ahrf_2022_2023 %>% 
+hosp_care_types <- ahrf_2022_2023 %>%
   select(cnty_name, stgh_gen_med_surg_care_adult_21, stgh_gen_med_surg_care_ped_21, stgh_obstetrc_care_21, stgh_neonat_icu_21, stgh_amb_svc_21, stgh_air_amb_svc_21, stgh_birth_postprtm_rm_21, stgh_case_mgmt_21, stnglth_case_mgmt_21, stgh_chemthpy_21, stgh_criss_prevn_21, stgh_ed_21, stgh_off_camps_ed_21, stgh_ped_ed_21, stgh_cert_tram_ctr_21, stgh_comn_hlth_eductn_21, stgh_oncolgy_svc_21, stgh_prim_care_deprtmnt_21, stgh_psych_conslttn_lisn_svc_21, stnglth_psych_conslt_svc_21, stgh_psych_ped_care_svc_21, stgh_psych_gertrc_svc_21, stgh_psych_eductnl_svc_21, stgh_psych_outpt_svc_21, stgh_psych_intensv_outpt_svc_21, sth_socl_comn_psych_svc_21, sth_natal_postprtm_psych_svc_21, stgh_psych_php_adult_21, stgh_psych_php_ped_21, stgh_psych_rsdntl_tx_adult_21, stgh_psych_rsdntl_tx_ped_21, stgh_rural_hlth_clincs_21, stgh_psych_care_21, stgh_substnc_use_inpat_care_21, stgh_substnc_use_ped_svc_21, stgh_substnc_use_outpt_svc_21, stgh_substnc_use_php_21, sth_med_assistd_opid_tx_21, sth_med_assistd_oth_subst_tx_21)
 ```
 
-```{r}
-care_type_test <- hosp_care_types %>% 
-  pivot_longer(cols = c(stgh_gen_med_surg_care_adult_21, stgh_gen_med_surg_care_ped_21, stgh_obstetrc_care_21, stgh_neonat_icu_21, stgh_amb_svc_21, stgh_air_amb_svc_21, stgh_birth_postprtm_rm_21, stgh_case_mgmt_21, stnglth_case_mgmt_21, stgh_chemthpy_21, stgh_criss_prevn_21, stgh_ed_21, stgh_off_camps_ed_21, stgh_ped_ed_21, stgh_cert_tram_ctr_21, stgh_comn_hlth_eductn_21, stgh_oncolgy_svc_21, stgh_prim_care_deprtmnt_21, stgh_psych_conslttn_lisn_svc_21, stnglth_psych_conslt_svc_21, stgh_psych_ped_care_svc_21, stgh_psych_gertrc_svc_21, stgh_psych_eductnl_svc_21, stgh_psych_outpt_svc_21, stgh_psych_intensv_outpt_svc_21, sth_socl_comn_psych_svc_21, sth_natal_postprtm_psych_svc_21, stgh_psych_php_adult_21, stgh_psych_php_ped_21, stgh_psych_rsdntl_tx_adult_21, stgh_psych_rsdntl_tx_ped_21, stgh_rural_hlth_clincs_21, stgh_psych_care_21, stgh_substnc_use_inpat_care_21, stgh_substnc_use_ped_svc_21, stgh_substnc_use_outpt_svc_21, stgh_substnc_use_php_21, sth_med_assistd_opid_tx_21, sth_med_assistd_oth_subst_tx_21), names_to = c("hospital_type", "care_type", "year"), names_pattern =  "([stnglth]+)_(.*)_(.*)", values_to = "count")
+```{r hospital-care-data-pivot}
+care_types <- hosp_care_types %>%
+  pivot_longer(cols = c(stgh_gen_med_surg_care_adult_21, stgh_gen_med_surg_care_ped_21, stgh_obstetrc_care_21, stgh_neonat_icu_21, stgh_amb_svc_21, stgh_air_amb_svc_21, stgh_birth_postprtm_rm_21, stgh_case_mgmt_21, stnglth_case_mgmt_21, stgh_chemthpy_21, stgh_criss_prevn_21, stgh_ed_21, stgh_off_camps_ed_21, stgh_ped_ed_21, stgh_cert_tram_ctr_21, stgh_comn_hlth_eductn_21, stgh_oncolgy_svc_21, stgh_prim_care_deprtmnt_21, stgh_psych_conslttn_lisn_svc_21, stnglth_psych_conslt_svc_21, stgh_psych_ped_care_svc_21, stgh_psych_gertrc_svc_21, stgh_psych_eductnl_svc_21, stgh_psych_outpt_svc_21, stgh_psych_intensv_outpt_svc_21, sth_socl_comn_psych_svc_21, sth_natal_postprtm_psych_svc_21, stgh_psych_php_adult_21, stgh_psych_php_ped_21, stgh_psych_rsdntl_tx_adult_21, stgh_psych_rsdntl_tx_ped_21, stgh_rural_hlth_clincs_21, stgh_psych_care_21, stgh_substnc_use_inpat_care_21, stgh_substnc_use_ped_svc_21, stgh_substnc_use_outpt_svc_21, stgh_substnc_use_php_21, sth_med_assistd_opid_tx_21, sth_med_assistd_oth_subst_tx_21), names_to = c("hospital_type", "care_type", "care_type_year"), names_pattern =  "([stnglthruralcomfedly]+)_(.*)_(.*)", values_to = "count") %>%
+  mutate(care_type_year = as.numeric(care_type_year) + 2000) %>%
+  distinct(cnty_name, hospital_type, care_type, care_type_year, .keep_all = TRUE)
+
+care_types <- care_types %>% 
+  left_join(pop_counts, by = c("cnty_name" = "county_name")) %>% 
+  distinct(cnty_name, care_type, care_type_year, census_year, popn_est_year, .keep_all = TRUE)
+
+write_csv(care_types, "~/Desktop/GitHub/data_science_2/data/care_types.csv")
+```
+
+```{r dental-care}
+dental_care <- ahrf_2022_2023 %>%
+  select(cnty_name, dent_npi_22, dent_npi_21, dent_nf_fed_proflly_activ_21, dent_nf_fed_proflly_activ_20)
+
+dental_care <- dental_care %>%
+  pivot_longer(starts_with("dent_npi"), names_to = "dent_data_year", values_to = "dentist_count", names_prefix = "dent_npi_") %>%
+  mutate(dent_data_year = as.numeric(dent_data_year) + 2000) %>%
+  pivot_longer(starts_with("dent_nf_fed_proflly_activ"), names_to = "active_data_year", values_to = "active_dentist_count", names_prefix = "dent_nf_fed_proflly_activ_") %>%
+  mutate(active_data_year = as.numeric(active_data_year) + 2000) %>%
+  select(cnty_name, dent_data_year, dentist_count, active_dentist_count) %>%
+  distinct(cnty_name, dent_data_year, .keep_all = TRUE)
+
+dental_care <- dental_care %>% 
+  left_join(pop_counts, by = c("cnty_name" = "county_name"))
+
+write_csv(dental_care, "~/Desktop/GitHub/data_science_2/data/dental_care.csv")
+```
+
+```{r nurses}
+nurses <- ahrf_2022_2023 %>%
+  select(cnty_name, np_npi_22, np_npi_21, clin_nurse_spec_npi_22, clin_nurse_spec_npi_21, crna_npi_22, crna_npi_21, apn_midwvs_npi_22, apn_midwvs_npi_21)
+
+nurses <- nurses %>%
+  pivot_longer(starts_with("np_npi"), names_to = "np_year", values_to = "np_count", names_prefix = "np_npi_") %>%
+  mutate(np_year = as.numeric(np_year) + 2000) %>%
+  pivot_longer(starts_with("clin_nurse_spec_npi"), names_to = "clin_nurse_year", values_to = "clin_nurse_count", names_prefix = "clin_nurse_spec_npi_") %>%
+  mutate(clin_nurse_year = as.numeric(clin_nurse_year) + 2000) %>%
+  pivot_longer(starts_with("crna_npi"), names_to = "crna_year", values_to = "crna_count", names_prefix = "crna_npi_") %>%
+  mutate(crna_year = as.numeric(crna_year) + 2000) %>%
+  pivot_longer(starts_with("apn_midwvs_npi"), names_to = "apn_midwives_year", values_to = "apn_midwives_count", names_prefix = "apn_midwvs_npi_") %>%
+  mutate(apn_midwives_year = as.numeric(apn_midwives_year) + 2000) %>%
+  select(cnty_name, np_year, np_count, clin_nurse_count, crna_count, apn_midwives_count) %>%
+  distinct(cnty_name, np_year, .keep_all = TRUE)
+
+nurses <- nurses %>% 
+  left_join(pop_counts, by = c("cnty_name" = "county_name"))
+
+write_csv(nurses, "~/Desktop/GitHub/data_science_2/data/nurses.csv")
+```
+
+```{r facility-types}
+facility_types <- ahrf_2022_2023 %>%
+  select(cnty_name, rural_hlth_clincs_22, rural_hlth_clincs_21, comn_mentl_hlth_ctr_22, comn_mentl_hlth_ctr_21, fedly_qualfd_hlth_ctr_22, fedly_qualfd_hlth_ctr_21)
+
+facility_types <- facility_types %>%
+  pivot_longer(starts_with("rural_hlth_clincs"), names_to = "facility_type_data_year", values_to = "rural_health_clinic_count", names_prefix = "rural_hlth_clincs_") %>%
+  mutate(facility_type_data_year = as.numeric(facility_type_data_year) + 2000) %>%
+  pivot_longer(starts_with("comn_mentl_hlth_ctr"), names_to = "comn_mentl_hlth_ctr_year", values_to = "community_mh_center_count", names_prefix = "comn_mentl_hlth_ctr_") %>%
+  mutate(comn_mentl_hlth_ctr_year = as.numeric(comn_mentl_hlth_ctr_year) + 2000) %>%
+  pivot_longer(starts_with("fedly_qualfd_hlth_ctr"), names_to = "fqhc_year", values_to = "fqhc_count", names_prefix = "fedly_qualfd_hlth_ctr_") %>%
+  mutate(fqhc_year = as.numeric(fqhc_year) + 2000) %>%
+  select(cnty_name, facility_type_data_year, rural_health_clinic_count, community_mh_center_count, fqhc_count) %>%
+  distinct(cnty_name, facility_type_data_year, .keep_all = TRUE)
+
+facility_types <- facility_types %>% 
+  left_join(pop_counts, by = c("cnty_name" = "county_name"))
+
+write_csv(facility_types, "~/Desktop/GitHub/data_science_2/data/facility_types.csv")
 ```
 
 

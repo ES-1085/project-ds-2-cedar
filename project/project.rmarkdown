@@ -2,6 +2,7 @@
 
 # Load Packages & Data
 
+
 ```{r load-packages, warning = FALSE, echo = FALSE, message = FALSE}
 library(gtable)
 library(ggridges)
@@ -32,13 +33,12 @@ all_physicians <- read.csv("~/Desktop/GitHub/data_science_2/data/all_physicians.
 hosp_adm_data <- read.csv("~/Desktop/GitHub/data_science_2/data/hosp_adm_data.csv")
 hosp_data <- read.csv("~/Desktop/GitHub/data_science_2/data/hosp_data.csv")
 care_types <- read.csv("~/Desktop/GitHub/data_science_2/data/care_types.csv")
-dental_care <- read.csv("~/Desktop/GitHub/data_science_2/data/dental_care.csv")
-nurses <- read.csv("~/Desktop/GitHub/data_science_2/data/nurses.csv")
-facility_types <- read.csv("~/Desktop/GitHub/data_science_2/data/facility_types.csv")
 ```
 
 
+
 # Initial Exploration
+
 
 ```{r hpsa-score-change}
 hpsa_pc %>% 
@@ -55,6 +55,18 @@ hpsa_mh %>%
   ggplot(aes(x = data_year, y = hpsa_mh_score)) +
   geom_line(color = "#00C377") + 
   facet_wrap(~ county_name)
+```
+
+```{r BROKEN-CODE-JAIL-pop-change}
+# maine_pop %>%
+#   select(cnty_name, cens_popn_10, cens_popn_20) %>% 
+#   mutate(pct_change = (cens_popn_20/lag(cens_popn_10) - 1) * 100)
+
+maine_pop %>% 
+  group_by(cnty_name) %>% 
+  mutate(perc = cens_popn_20 / sum(cens_popn_10))
+
+# code from: "https://stackoverflow.com/questions/48196552/calculate-percentage-change-in-r-using-dplyr"
 ```
 
 ```{r primary-care-provider-counts}
@@ -93,6 +105,16 @@ md_active %>%
   geom_col() +
   facet_wrap(~ county_name) +
   scale_fill_viridis_c()
+```
+
+```{r}
+hospitals %>% 
+  select(cnty_name, hosp_20, hosp_21) %>% 
+  arrange(cnty_name)
+
+hospital_admissions %>% 
+  select(cnty_name, hosp_adm_20, hosp_adm_21) %>% 
+  arrange(cnty_name)
 ```
 
 ```{r}
@@ -146,65 +168,19 @@ care_types %>%
 ```
 
 ```{r}
-hosp_data %>% 
-  count(county_name, hosp_count_year, hosp_count, stgh_count, lth_count, sth_psych_count, sth_child_med_count, sth_child_psych_count, lth_psych_count, lth_child_psych_count, sth_comn_count, vetn_hosp_count, stgh_critcl_access_count, sole_comn_provdrs_count)
+
 ```
+
 
 
 # Analysis
 
-```{r gp-md-change-model}
-all_physicians %>% 
-  ggplot(aes(x = popn_est_count, y = all_gp_md_count)) + 
-  geom_point(position = "jitter", alpha = 0.5) +
-  geom_smooth(method = "lm", se = FALSE)
 
-(gp_md_change_pop <- linear_reg() %>% 
-  set_engine("lm") %>% 
-  fit(all_gp_md_count ~ physician_count_year + county_name + popn_est_count, data = all_physicians))
+```{r provider-change-model}
 
-tidy(gp_md_change_pop)
-
-(gp_md_change_pop_aug <- augment(gp_md_change_pop$fit))
-
-gp_md_change_pop_aug %>% 
-  ggplot(aes(x = .fitted, y = .resid)) + 
-  geom_point(alpha = 0.5) +
-  geom_smooth(method = "lm", se = FALSE)
-
-glance(gp_md_change_pop)$r.squared %>% 
-  tidy()
-glance(gp_md_change_pop)$adj.r.squared %>% 
-  tidy()
 ```
 
-```{r}
-hpsa_pc_provider_counts %>% 
-  ggplot(aes(x = count_year, y = pc_physician_count)) + 
-  geom_point(position = "jitter", alpha = 0.5) +
-  geom_smooth(method = "lm", se = FALSE)
+```{r }
 
-(pc_provider_change <- linear_reg() %>% 
-  set_engine("lm") %>% 
-  fit(pc_physician_count ~ count_year + county_name, data = hpsa_pc_provider_counts))
-
-tidy(pc_provider_change)
-
-(pc_provider_change_aug <- augment(pc_provider_change$fit))
-
-pc_provider_change_aug %>% 
-  ggplot(aes(x = .fitted, y = .resid)) + 
-  geom_point(alpha = 0.5) +
-  geom_smooth(method = "lm", se = FALSE)
-
-glance(gp_md_change_pop)$r.squared %>% 
-  tidy()
-glance(gp_md_change_pop)$adj.r.squared %>% 
-  tidy()
 ```
-
-
-
-
-
 
