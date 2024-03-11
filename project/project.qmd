@@ -97,9 +97,12 @@ md_active %>%
 
 ```{r}
 care_types %>% 
-  count(care_type) %>% 
-  arrange(care_type)
+  filter(count != "0") %>% 
+  ggplot(aes(y = care_type, fill = cnty_name)) +
+  geom_col(position = "dodge") +
+  facet_wrap(~ cnty_name, scales = "free")
 ```
+
 
 ```{r psych-care-by-county}
 care_types %>% 
@@ -108,7 +111,7 @@ care_types %>%
   ggplot(aes(x = care_type, y = count, fill = cnty_name)) +
   geom_col() +
   coord_flip() +
-  facet_wrap(~ cnty_name) +
+  facet_wrap(~ cnty_name, scales = "free") +
   scale_fill_viridis_d()
 ```
 
@@ -141,7 +144,7 @@ care_types %>%
   ggplot(aes(x = care_type, y = count, fill = cnty_name)) +
   geom_col() +
   coord_flip() +
-  facet_wrap(~ cnty_name) +
+  facet_wrap(~ cnty_name, scales = "free") +
   scale_fill_viridis_d()
 ```
 
@@ -149,6 +152,400 @@ care_types %>%
 hosp_data %>% 
   count(county_name, hosp_count_year, hosp_count, stgh_count, lth_count, sth_psych_count, sth_child_med_count, sth_child_psych_count, lth_psych_count, lth_child_psych_count, sth_comn_count, vetn_hosp_count, stgh_critcl_access_count, sole_comn_provdrs_count)
 ```
+
+```{r}
+hosp_adm_data %>% 
+  count(county_name, hosp_adm_count_year, hosp_adm_count, stgh_hosp_count, stnglth_hosp_count, sth_comn_hosp_count)
+```
+
+```{r}
+dental_care %>% 
+  count(cnty_name, dent_data_year, active_dentist_count)
+```
+
+```{r}
+facility_types %>% 
+  count(cnty_name, facility_type_data_year, rural_health_clinic_count, community_mh_center_count, fqhc_count)
+```
+
+```{r}
+md %>% 
+  ggplot(aes(x = md_data_year, y = active_md_count)) +
+  geom_line() +
+  facet_wrap(~ county_name)
+
+md %>% 
+  ggplot(aes(x = md_data_year, y = all_md_patient_care_count)) +
+  geom_line() +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+nurses %>% 
+  count(cnty_name, np_year, np_count, clin_nurse_count, crna_count, apn_midwives_count)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_allergy_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_allergy_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_allergy_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_anesth_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_anesth_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_anesth_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_card_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_card_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_card_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_derm_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_derm_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_derm_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_emerg_med_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_emerg_med_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_emerg_med_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_fammed_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_fammed_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_fammed_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_gastr_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_gastr_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_gastr_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_genintmed_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_genintmed_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_genintmed_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_gen_surg_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_gen_surg_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_gen_surg_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_neuro_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_neuro_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_neuro_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_obgyn_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_obgyn_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_obgyn_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_ophth_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_ophth_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_ophth_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_psych_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_psych_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_psych_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_spec_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_spec_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_spec_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_surg_spec_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_surg_spec_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_gen_surg_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(all_gp_md_count != "0") %>% 
+  ggplot(aes(x = county_name, y = all_gp_md_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = all_gp_md_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_child_psych_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_child_psych_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_child_psych_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(md_gen_ped_count != "0") %>% 
+  ggplot(aes(x = county_name, y = md_gen_ped_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_gen_ped_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(do_fammed_count != "0") %>% 
+  ggplot(aes(x = county_name, y = do_fammed_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = do_fammed_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(do_ped_count != "0") %>% 
+  ggplot(aes(x = county_name, y = do_ped_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = do_ped_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(do_obgyn_count != "0") %>% 
+  ggplot(aes(x = county_name, y = do_obgyn_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = do_obgyn_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(do_gen_surg_count != "0") %>% 
+  ggplot(aes(x = county_name, y = do_gen_surg_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = do_gen_surg_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(do_emerg_med_count != "0") %>% 
+  ggplot(aes(x = county_name, y = do_emerg_med_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = do_emerg_med_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+```{r}
+all_physicians %>% 
+  filter(do_psych_count != "0") %>% 
+  ggplot(aes(x = county_name, y = do_oth_spec_count)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  facet_wrap(~ physician_count_year, scales = "free")
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = do_oth_spec_count/census_count)) +
+  geom_smooth(method = "lm", color = "grey") +
+  geom_line(alpha = 0.5) +
+  facet_wrap(~ county_name)
+```
+
+
 
 
 # Analysis
