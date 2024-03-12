@@ -229,7 +229,7 @@ nurses %>%
   rename("County Name" = "cnty_name", "Year" = "np_year", "Nurse Practitioners" = "np_count", "Clinical Nurses" = "clin_nurse_count", "Certified Registered Nurse Anesthetists" = "crna_count", "Advance Practice Nurse Midwives" = "apn_midwives_count")
 ```
 
-```{r all-physicians}
+```{r all-physicians-allergists}
 all_physicians %>% 
   filter(md_allergy_count != "0") %>% 
   ggplot(aes(x = county_name, y = md_allergy_count)) +
@@ -250,7 +250,7 @@ all_physicians %>%
   facet_wrap(~ county_name)
 ```
 
-```{r}
+```{r all-physicians-anesthesiologists}
 all_physicians %>% 
   filter(md_anesth_count != "0") %>% 
   ggplot(aes(x = county_name, y = md_anesth_count)) +
@@ -271,7 +271,7 @@ all_physicians %>%
   facet_wrap(~ county_name)
 ```
 
-```{r}
+```{r all-physicians-cardiologists}
 all_physicians %>% 
   filter(md_card_count != "0") %>% 
   ggplot(aes(x = county_name, y = md_card_count)) +
@@ -292,42 +292,56 @@ all_physicians %>%
   facet_wrap(~ county_name)
 ```
 
-```{r}
+```{r all-physicians-dermatologists}
 all_physicians %>% 
   filter(md_derm_count != "0") %>% 
   ggplot(aes(x = county_name, y = md_derm_count)) +
-  geom_col(position = "dodge") +
+  geom_col(fill = "#009796", position = "dodge") +
   coord_flip() +
+  theme_minimal() +
+  labs(title = "Dermatologist (MD) Counts", subtitle = "By Maine County", x = "County", y = "Count") +
   facet_wrap(~ physician_count_year, scales = "free")
 
 all_physicians %>% 
+  filter(census_year == "2020") %>%  
   ggplot(aes(x = physician_count_year, y = md_derm_count/census_count)) +
-  geom_smooth(method = "lm", color = "grey") +
-  geom_line(alpha = 0.5) +
+  geom_smooth(method = "lm", color = "#AADB41") +
+  geom_line(alpha = 0.8, color = "#006992") +
+  theme_minimal() +
+  scale_y_continuous(labels = label_comma()) +
+  labs(title = "Dermatologist (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Dermatologist count was divided by county population as of the 2020 Census") +
   facet_wrap(~ county_name)
 ```
 
-```{r}
+```{r all-physicians-emergency-med}
 all_physicians %>% 
   filter(md_emerg_med_count != "0") %>% 
   ggplot(aes(x = county_name, y = md_emerg_med_count)) +
-  geom_col(position = "dodge") +
+  geom_col(fill = "#009796", position = "dodge") +
   coord_flip() +
+  theme_minimal() +
+  labs(title = "Emergency Medicine Doctor (MD) Counts", subtitle = "By Maine County", x = "County", y = "Count") +
   facet_wrap(~ physician_count_year, scales = "free")
 
 all_physicians %>% 
+  filter(census_year == "2020") %>% 
   ggplot(aes(x = physician_count_year, y = md_emerg_med_count/census_count)) +
-  geom_smooth(method = "lm", color = "grey") +
-  geom_line(alpha = 0.5) +
+  geom_smooth(method = "lm", color = "#AADB41") +
+  geom_line(alpha = 0.8, color = "#006992") +
+  theme_minimal() +
+  scale_y_continuous(labels = label_comma()) +
+  labs(title = "Emergency Medicine Doctor (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Emergency Medicine Doctor count was divided by county population as of the 2020 Census") +
   facet_wrap(~ county_name)
 ```
 
-```{r}
+```{r all-physicians-family-med}
 all_physicians %>% 
   filter(md_fammed_count != "0") %>% 
   ggplot(aes(x = county_name, y = md_fammed_count)) +
-  geom_col(position = "dodge") +
+  geom_col(fill = "#009796", position = "dodge") +
   coord_flip() +
+  theme_minimal() +
+  labs(title = "Emergency Medicine Doctor (MD) Counts", subtitle = "By Maine County", x = "County", y = "Count") +
   facet_wrap(~ physician_count_year, scales = "free")
 
 all_physicians %>% 
