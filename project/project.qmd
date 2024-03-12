@@ -36,6 +36,7 @@ care_types <- read.csv("~/Desktop/GitHub/data_science_2/data/care_types.csv")
 dental_care <- read.csv("~/Desktop/GitHub/data_science_2/data/dental_care.csv")
 nurses <- read.csv("~/Desktop/GitHub/data_science_2/data/nurses.csv")
 facility_types <- read.csv("~/Desktop/GitHub/data_science_2/data/facility_types.csv")
+county_poverty_rankings <- read.csv("~/Desktop/GitHub/data_science_2/data/county_poverty_rankings.csv")
 ```
 
 
@@ -62,7 +63,7 @@ hpsa_dental %>%
 hpsa_mh %>% 
   ggplot(aes(x = hpsa_mh_data_year, y = hpsa_mh_score)) +
   geom_line(color = "#007395") + 
-  labs(title = "HPSA Mental Health Care Provider Score", subtitle = "By Maine County", x = "Year", y = "HPSA Mental Health Care Score", caption = "A score of 0 means a county is not in shortage, a score of 1 means the entire county is in shortage,\n and a score of 2 means parts of a county are in shortage.") +
+  labs(title = "HPSA Mental Health Care Provider Score", subtitle = "By Maine County", x = "Year", y = "HPSA Mental Health Care Score", caption = "A score of 0 means a county is not in shortage, a score of 1 means the entire county is in shortage,\n and a score of 2 means parts of a county are in shortage. \n Data is from the Health Resources and Services Administration's Area Health Resource Files.") +
   theme_minimal() +
   facet_wrap(~ county_name)
 ```
@@ -132,7 +133,7 @@ care_types %>%
   coord_flip() +
   labs(title = "Psychiatric Care Offered by County", x = "Type of Care", y = "Count", fill = "Care Type") +
   theme_minimal() +
-  facet_wrap(~ cnty_name, scales = "free", ncol = 3) +
+  facet_wrap(~ cnty_name, ncol = 3) +
   scale_fill_viridis_d()
 ```
 
@@ -174,7 +175,7 @@ care_types %>%
   coord_flip() +
   theme_minimal() +
   labs(title = "Substance Use Treatment", subtitle = "By Maine County", x = "Treatment Type", y = "Count", fill = "County Name")+
-  facet_wrap(~ cnty_name, scales = "free") +
+  facet_wrap(~ cnty_name) +
   scale_fill_viridis_d()
 ```
 
@@ -242,8 +243,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>% 
   ggplot(aes(x = physician_count_year, y = md_allergy_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "Allergist (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Allergist count was divided by county population as of the 2020 Census") +
@@ -263,8 +263,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_anesth_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "Anesthesiologist (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Anesthesiologist count was divided by county population as of the 2020 Census") +
@@ -284,8 +283,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_card_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "Cardiologist (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Cardiologist count was divided by county population as of the 2020 Census") +
@@ -305,8 +303,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%  
   ggplot(aes(x = physician_count_year, y = md_derm_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "Dermatologist (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Dermatologist count was divided by county population as of the 2020 Census") +
@@ -326,8 +323,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>% 
   ggplot(aes(x = physician_count_year, y = md_emerg_med_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "Emergency Medicine Doctor (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Emergency Medicine Doctor count was divided by county population as of the 2020 Census") +
@@ -347,8 +343,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>% 
   ggplot(aes(x = physician_count_year, y = md_fammed_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "Family Medicine Doctor (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Family Medicine Doctor count was divided by county population as of the 2020 Census") +
@@ -368,8 +363,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_gastr_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "Gastroenterologist (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Gastroenterologist count was divided by county population as of the 2020 Census") +
@@ -389,8 +383,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_genintmed_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "General Internal Medicine Doctor (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "General Internal Medicine Doctor count was divided by county population as of the 2020 Census") +
@@ -410,8 +403,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_gen_surg_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "General Surgeon (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "General Surgeon count was divided by county population as of the 2020 Census") +
@@ -431,8 +423,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_neuro_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "Neurologist (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Neurologist count was divided by county population as of the 2020 Census") +
@@ -452,8 +443,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_obgyn_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "OBGYN (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "OBGYN count was divided by county population as of the 2020 Census") +
@@ -473,8 +463,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_ophth_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "Ophthalmologist (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Ophthalmologist count was divided by county population as of the 2020 Census") +
@@ -494,8 +483,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_psych_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "Psychiatrist (MD) Counts", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Psychiatrist count was divided by county population as of the 2020 Census") +
@@ -515,8 +503,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_spec_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "All Specialists (MD) Count", subtitle = "By Maine County", x = "Year", y = "Count", caption = "All specialists count was divided by county population as of the 2020 Census") +
@@ -536,8 +523,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_gen_surg_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "All Surgical Specialists (MD) Count", subtitle = "By Maine County", x = "Year", y = "Count", caption = "All surgical specialists count was divided by county population as of the 2020 Census") +
@@ -557,8 +543,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = all_gp_md_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "General Practitioner (MD) Count", subtitle = "By Maine County", x = "Year", y = "Count", caption = "General Practitioner count was divided by county population as of the 2020 Census") +
@@ -578,8 +563,7 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_child_psych_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "Child Psychiatrist (MD) Count", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Child psychiatrist count was divided by county population as of the 2020 Census") +
@@ -599,152 +583,26 @@ all_physicians %>%
 all_physicians %>% 
   filter(census_year == "2020") %>%
   ggplot(aes(x = physician_count_year, y = md_gen_ped_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
+  geom_line(color = "#006992", linewidth = 1) +
   theme_minimal() +
   scale_y_continuous(labels = label_comma()) +
   labs(title = "General Pediatrician (MD) Count", subtitle = "By Maine County", x = "Year", y = "Count", caption = "General pediatrician count was divided by county population as of the 2020 Census") +
   facet_wrap(~ county_name)
 ```
 
-```{r all-physicians-family-med-do}
-all_physicians %>% 
-  filter(do_fammed_count != "0") %>% 
-  ggplot(aes(x = county_name, y = do_fammed_count)) +
-  geom_col(fill = "#009796", position = "dodge") +
-  coord_flip() +
-  theme_minimal() +
-  labs(title = "Family Medicine Doctor (DO) Count", subtitle = "By Maine County", x = "County", y = "Count") +
-  facet_wrap(~ physician_count_year, scales = "free")
-
-all_physicians %>% 
-  filter(census_year == "2020") %>%
-  ggplot(aes(x = physician_count_year, y = do_fammed_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
-  theme_minimal() +
-  scale_y_continuous(labels = label_comma()) +
-  labs(title = "Family Medicine Doctor (DO) Count", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Family medicine doctor count was divided by county population as of the 2020 Census") +
-  facet_wrap(~ county_name)
-```
-
-```{r all-physicians-pediatricians-do}
-all_physicians %>% 
-  filter(do_ped_count != "0") %>% 
-  ggplot(aes(x = county_name, y = do_ped_count)) +
-  geom_col(fill = "#009796", position = "dodge") +
-  coord_flip() +
-  theme_minimal() +
-  labs(title = "Pediatrician (DO) Count", subtitle = "By Maine County", x = "County", y = "Count") +
-  facet_wrap(~ physician_count_year, scales = "free")
-
-all_physicians %>% 
-  filter(census_year == "2020") %>%
-  ggplot(aes(x = physician_count_year, y = do_ped_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
-  theme_minimal() +
-  scale_y_continuous(labels = label_comma()) +
-  labs(title = "Pediatrician (DO) Count", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Pediatrician count was divided by county population as of the 2020 Census") +
-  facet_wrap(~ county_name)
-```
-
-```{r all-physicians-obgyns-do}
-all_physicians %>% 
-  filter(do_obgyn_count != "0") %>% 
-  ggplot(aes(x = county_name, y = do_obgyn_count)) +
-  geom_col(fill = "#009796", position = "dodge") +
-  coord_flip() +
-  theme_minimal() +
-  labs(title = "OBGYN (DO) Count", subtitle = "By Maine County", x = "County", y = "Count") +
-  facet_wrap(~ physician_count_year, scales = "free")
-
-all_physicians %>% 
-  filter(census_year == "2020") %>%
-  ggplot(aes(x = physician_count_year, y = do_obgyn_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
-  theme_minimal() +
-  scale_y_continuous(labels = label_comma()) +
-  labs(title = "OBGYN (DO) Count", subtitle = "By Maine County", x = "Year", y = "Count", caption = "OBGYN count was divided by county population as of the 2020 Census") +
-  facet_wrap(~ county_name)
-```
-
-```{r all-physicians-gen-surg-do}
-all_physicians %>% 
-  filter(do_gen_surg_count != "0") %>% 
-  ggplot(aes(x = county_name, y = do_gen_surg_count)) +
-  geom_col(fill = "#009796", position = "dodge") +
-  coord_flip() +
-  theme_minimal() +
-  labs(title = "General Surgeon (DO) Count", subtitle = "By Maine County", x = "County", y = "Count") +
-  facet_wrap(~ physician_count_year, scales = "free")
-
-all_physicians %>% 
-  filter(census_year == "2020") %>%
-  ggplot(aes(x = physician_count_year, y = do_gen_surg_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
-  theme_minimal() +
-  scale_y_continuous(labels = label_comma()) +
-  labs(title = "General Surgeon (DO) Count", subtitle = "By Maine County", x = "Year", y = "Count", caption = "General surgeon count was divided by county population as of the 2020 Census") +
-  facet_wrap(~ county_name)
-```
-
-```{r all-physicians-emergency-med-do}
-all_physicians %>% 
-  filter(do_emerg_med_count != "0") %>% 
-  ggplot(aes(x = county_name, y = do_emerg_med_count)) +
-  geom_col(fill = "#009796", position = "dodge") +
-  coord_flip() +
-  theme_minimal() +
-  labs(title = "Emergency Medicine Doctor (DO) Count", subtitle = "By Maine County", x = "County", y = "Count") +
-  facet_wrap(~ physician_count_year, scales = "free")
-
-all_physicians %>% 
-  filter(census_year == "2020") %>%
-  ggplot(aes(x = physician_count_year, y = do_emerg_med_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
-  theme_minimal() +
-  scale_y_continuous(labels = label_comma()) +
-  labs(title = "Emergency Medicine Doctor (DO) Count", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Emergency medicine doctor count was divided by county population as of the 2020 Census") +
-  facet_wrap(~ county_name)
-```
-
-```{r all-physicians-psychiatrists-do}
-all_physicians %>% 
-  filter(do_psych_count != "0") %>% 
-  ggplot(aes(x = county_name, y = do_oth_spec_count)) +
-  geom_col(fill = "#009796", position = "dodge") +
-  coord_flip() +
-  theme_minimal() +
-  labs(title = "Psychiatrist (DO) Count", subtitle = "By Maine County", x = "County", y = "Count") +
-  facet_wrap(~ physician_count_year, scales = "free")
-
-all_physicians %>% 
-  filter(census_year == "2020") %>%
-  ggplot(aes(x = physician_count_year, y = do_oth_spec_count/census_count)) +
-  geom_smooth(method = "lm", color = "#AADB41") +
-  geom_line(alpha = 0.8, color = "#006992") +
-  theme_minimal() +
-  scale_y_continuous(labels = label_comma()) +
-  labs(title = "Psychiatrist (DO) Count", subtitle = "By Maine County", x = "Year", y = "Count", caption = "Psychiatrist count was divided by county population as of the 2020 Census") +
-  facet_wrap(~ county_name)
-```
 
 
 # Analysis
 
 ```{r gp-md-change-model}
 all_physicians %>% 
-  ggplot(aes(x = popn_est_count, y = all_gp_md_count)) + 
+  ggplot(aes(x = popn_est_count, y = all_gp_md_count, color = county_name)) + 
   geom_point(position = "jitter", alpha = 0.5) +
   geom_smooth(method = "lm", se = FALSE)
 
 (gp_md_change_pop <- linear_reg() %>% 
   set_engine("lm") %>% 
-  fit(all_gp_md_count ~ physician_count_year + county_name + popn_est_count, data = all_physicians))
+  fit(md_fammed_count ~ physician_count_year + county_name*popn_est_count, data = all_physicians))
 
 tidy(gp_md_change_pop)
 
@@ -761,7 +619,7 @@ glance(gp_md_change_pop)$adj.r.squared %>%
   tidy()
 ```
 
-```{r}
+```{r physician-change-model}
 hpsa_pc_provider_counts %>% 
   ggplot(aes(x = pc_physician_count_year, y = pc_physician_count)) + 
   geom_point(position = "jitter", alpha = 0.5) +
@@ -769,7 +627,7 @@ hpsa_pc_provider_counts %>%
 
 (pc_provider_change <- linear_reg() %>% 
   set_engine("lm") %>% 
-  fit(pc_physician_count ~ pc_physician_count_year + county_name, data = hpsa_pc_provider_counts))
+  fit(pc_physician_count/popn_est_count ~ pc_physician_count_year, data = hpsa_pc_provider_counts))
 
 tidy(pc_provider_change)
 
@@ -786,7 +644,55 @@ glance(pc_provider_change)$adj.r.squared %>%
   tidy()
 ```
 
+```{r dentist-change-model}
+dental_care %>% 
+  ggplot(aes(x = dent_data_year, y = active_dentist_count)) + 
+  geom_point(position = "jitter", alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE)
 
+(dental_provider_change <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  fit(active_dentist_count ~ dent_data_year + popn_est_count, data = dental_care))
+
+tidy(dental_provider_change)
+
+(dental_provider_change_aug <- augment(dental_provider_change$fit))
+
+dental_provider_change_aug %>% 
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE)
+
+glance(dental_provider_change)$r.squared %>% 
+  tidy()
+glance(dental_provider_change)$adj.r.squared %>% 
+  tidy()
+```
+
+```{r md-emerg-med-model}
+md_counts %>% 
+  ggplot(aes(x = popn_est_count, y = md_emerg_med_count)) + 
+  geom_point(position = "jitter", alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE)
+
+(md_emerg_med_change <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  fit(md_emerg_med_count ~ md_count_year + popn_est_count, data = md_counts))
+
+tidy(md_emerg_med_change)
+
+(md_emerg_med_change_aug <- augment(md_emerg_med_change$fit))
+
+md_emerg_med_change_aug %>% 
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE)
+
+glance(md_emerg_med_change)$r.squared %>% 
+  tidy()
+glance(md_emerg_med_change)$adj.r.squared %>% 
+  tidy()
+```
 
 
 

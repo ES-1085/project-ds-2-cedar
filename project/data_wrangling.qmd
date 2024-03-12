@@ -670,6 +670,25 @@ facility_types <- facility_types %>%
 write_csv(facility_types, "~/Desktop/GitHub/data_science_2/data/facility_types.csv")
 ```
 
+```{r joins_with_county_poverty_ranking}
+all_physicians <- all_physicians %>% 
+  left_join(county_poverty_rankings)
+
+hpsa_pc_provider_counts <- hpsa_pc_provider_counts %>% 
+  left_join(county_poverty_rankings)
+
+dental_care <- dental_care %>% 
+  left_join(county_poverty_rankings, by = c("cnty_name" = "county_name"))
+
+md_counts <- md_counts %>% 
+  left_join(county_poverty_rankings)
+
+nurses <- nurses %>% 
+  left_join(county_poverty_rankings, by = c("cnty_name" = "county_name"))
+
+hosp_data <- hosp_data %>% 
+  left_join(county_poverty_rankings)
+```
 
 
 
