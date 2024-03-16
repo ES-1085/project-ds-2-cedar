@@ -597,28 +597,24 @@ all_physicians <- all_physicians %>%
 ```
 
 
-# Analysis
+# Models
 
 ```{r gp-md-change-model}
-all_physicians %>% 
-  ggplot() + 
-  geom_point(aes(x = all_md_count, y = all_gp_md_count), position = "jitter", alpha = 0.5) +
-  geom_smooth(aes(x = all_md_count, y = all_gp_md_count), method = "lm", se = FALSE)
-
-(gp_md_change_pov <- linear_reg() %>% 
+(gp_md_change <- linear_reg() %>% 
   set_engine("lm") %>% 
   fit(all_gp_md_count/all_md_count ~ physician_count_year, data = all_physicians))
 
-tidy(gp_md_change_pov)
+tidy(gp_md_change)
+glance(gp_md_change)
 
 all_physicians %>% 
   ggplot(aes(x = physician_count_year, y = all_gp_md_count/all_md_count)) +
-  geom_point() +
+  geom_point(position = "jitter", alpha = 0.5) +
   geom_smooth(method = "lm", se = FALSE, color = "#009796") +
   theme_minimal() +
   labs(title = "General Practitioner Count Divided by Total MD Count", subtitle = "By count year", x = "Year", y = "All GP/All MD")
 
-(gp_md_change_pov_aug <- augment(gp_md_change_pov$fit))
+(gp_md_change_aug <- augment(gp_md_change$fit))
 
 gp_md_change_pov_aug %>% 
   ggplot(aes(x = .fitted, y = .resid)) + 
@@ -631,22 +627,61 @@ glance(gp_md_change_pov)$r.squared %>%
   tidy()
 glance(gp_md_change_pov)$adj.r.squared %>% 
   tidy()
+```
+
+```{r gp-md-change-pov-model}
+(gp_md_change_pov <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  fit(all_gp_md_count/all_md_count ~ physician_count_year + pct_below_pov_line, data = all_physicians))
+
+tidy(gp_md_change_pov)
+glance(gp_md_change_pov)
 
 all_physicians %>% 
-  mutate(test = all_gp_md_count / all_md_count)
+  ggplot(aes(x = physician_count_year, y = all_gp_md_count/all_md_count, color = pct_below_pov_line)) +
+  geom_point(position = "jitter", alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() +
+  labs(title = "General Practitioner Count Divided by Total MD Count by Year and \nPercent Below Poverty Line", subtitle = "By count year", x = "Year", y = "All GP/All MD", color = "Percent Below Poverty Line") +
+  scale_color_viridis_c()
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = all_gp_md_count/all_md_count, color = county_name)) +
+  geom_point(position = "jitter", alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() +
+  labs(title = "General Practitioner Count Divided by Total MD Count by Year and County", subtitle = "By count year", x = "Year", y = "All GP/All MD", color = "County Name") +
+  scale_color_viridis_d()
+
+(gp_md_change_pov_aug <- augment(gp_md_change_pov$fit))
+
+gp_md_change_pov_aug %>% 
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_point(position = "jitter", alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() +
+  labs(title = "Fitted and Residual Values", subtitle = "General practitioners (MD) divided by all MDs by count year.") 
+
+glance(gp_md_change_pov)$r.squared %>% 
+  tidy()
+glance(gp_md_change_pov)$adj.r.squared %>% 
+  tidy()
 ```
 
 ```{r physician-change-model}
 hpsa_pc_provider_counts %>% 
-  ggplot(aes(x = pc_physician_count, y = md_pc_count)) + 
-  geom_point(position = "jitter", alpha = 0.5) +
-  geom_smooth(method = "lm", se = FALSE)
+  ggplot(aes(x = pc_physician_count_year, y = pc_physician_count/popn_est_count)) + 
+  geom_point(position = "jitter", alpha = 0.5) + 
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() + 
+  labs(title = "Primary Care Physician Count per Capita by Year", x = "Year", y = "Primary Care Physicians per Capita")
 
 (pc_provider_change <- linear_reg() %>% 
   set_engine("lm") %>% 
   fit(pc_physician_count/popn_est_count ~ pc_physician_count_year, data = hpsa_pc_provider_counts))
 
 tidy(pc_provider_change)
+glance(pc_provider_change)
 
 (pc_provider_change_aug <- augment(pc_provider_change$fit))
 
@@ -655,7 +690,7 @@ pc_provider_change_aug %>%
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", se = FALSE, color = "#009796") +
   theme_minimal() +
-  labs(title = "Fitted and Residual Values", subtitle = "Primary care (MD) divided by all primary care physicians.") 
+  labs(title = "Fitted and Residual Values") 
 
 glance(pc_provider_change)$r.squared %>% 
   tidy()
@@ -663,17 +698,64 @@ glance(pc_provider_change)$adj.r.squared %>%
   tidy()
 ```
 
+```{r physician-change-pov-model}
+hpsa_pc_provider_counts %>% 
+  ggplot(aes(x = pc_physician_count_year, y = pc_physician_count/popn_est_count, color = pct_below_pov_line)) + 
+  geom_point(position = "jitter", alpha = 0.8) + 
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() + 
+  labs(title = "Primary Care Physician Count per Capita by Year and \nPercent of Population Below Poverty Line", x = "Year", y = "Primary Care Physicians per Capita", color = "Percent Below Poverty Line") +
+  scale_color_viridis_c()
+
+hpsa_pc_provider_counts %>% 
+  ggplot(aes(x = pc_physician_count_year, y = pc_physician_count/popn_est_count, color = county_name)) + 
+  geom_point(position = "jitter", alpha = 0.8) + 
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() + 
+  labs(title = "Primary Care Physician Count per Capita by Year and County", x = "Year", y = "Primary Care Physicians per Capita", color = "County") +
+  scale_color_viridis_d()
+
+(pc_provider_change_pov_covariation_test <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  fit(pct_below_pov_line ~ county_name, data = hpsa_pc_provider_counts) %>% 
+    tidy())
+
+(pc_provider_change_pov <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  fit(pc_physician_count/popn_est_count ~ pc_physician_count_year + pct_below_pov_line, data = hpsa_pc_provider_counts))
+
+tidy(pc_provider_change_pov)
+glance(pc_provider_change_pov)
+
+(pc_provider_change_pov_aug <- augment(pc_provider_change_pov$fit))
+
+pc_provider_change_pov_aug %>% 
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() +
+  labs(title = "Fitted and Residual Values", subtitle = "Primary care physicians divided by general population by count year and \npercent of the population below poverty level.") 
+
+glance(pc_provider_change_pov)$r.squared %>% 
+  tidy()
+glance(pc_provider_change_pov)$adj.r.squared %>% 
+  tidy()
+```
+
 ```{r dentist-change-model}
 dental_care %>% 
-  ggplot(aes(x = dent_data_year, y = active_dentist_count)) + 
+  ggplot(aes(x = dent_data_year, y = active_dentist_count/popn_est_count)) + 
   geom_point(position = "jitter", alpha = 0.5) +
-  geom_smooth(method = "lm", se = FALSE)
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() +
+  labs(title = "Active Dentists per Capita by Year", subtitle = "Data from 2021 and 2022", x = "Year", y = "Active Dentists per Capita")
 
 (dental_provider_change <- linear_reg() %>% 
   set_engine("lm") %>% 
-  fit(active_dentist_count/popn_est_count ~ dent_data_year + pct_below_pov_line, data = dental_care))
+  fit(active_dentist_count/popn_est_count ~ dent_data_year, data = dental_care))
 
 tidy(dental_provider_change)
+glance(dental_provider_change)
 
 (dental_provider_change_aug <- augment(dental_provider_change$fit))
 
@@ -688,17 +770,58 @@ glance(dental_provider_change)$adj.r.squared %>%
   tidy()
 ```
 
+```{r dentist-change-pov-model}
+dental_care %>% 
+  ggplot(aes(x = dent_data_year, y = active_dentist_count/popn_est_count, color = pct_below_pov_line)) + 
+  geom_point(position = "jitter", alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() + 
+  labs(title = "Active Dentists per Capita by Year and Percent Below Poverty Line", subtitle = "Data from 2021 and 2022", x = "Year", y = "Active Dentists per Capita", color = "Percent Below Poverty Line") +
+  scale_color_viridis_c()
+
+dental_care %>% 
+  ggplot(aes(x = dent_data_year, y = active_dentist_count/popn_est_count, color = cnty_name)) + 
+  geom_point(position = "jitter", alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() + 
+  labs(title = "Active Dentists per Capita by Year and County", subtitle = "Data from 2021 and 2022", x = "Year", y = "Active Dentists per Capita", color = "County") +
+  scale_color_viridis_d()
+
+(dental_provider_change_pov <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  fit(active_dentist_count/popn_est_count ~ dent_data_year, data = dental_care))
+
+tidy(dental_provider_change_pov)
+glance(dental_provider_change_pov)
+
+(dental_provider_change_pov_aug <- augment(dental_provider_change_pov$fit))
+
+dental_provider_change_pov_aug %>% 
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE)
+
+glance(dental_provider_change_pov)$r.squared %>% 
+  tidy()
+glance(dental_provider_change_pov)$adj.r.squared %>% 
+  tidy()
+```
+
+
 ```{r md-emerg-med-model}
 all_physicians %>% 
-  ggplot(aes(x = popn_est_count, y = md_emerg_med_count)) + 
+  ggplot(aes(x = physician_count_year, y = md_emerg_med_count/all_md_count)) + 
   geom_point(position = "jitter", alpha = 0.5) +
-  geom_smooth(method = "lm", se = FALSE)
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() +
+  labs(title = "Emergency Medicine Doctors (MD) per Capita by Year", x = "Year", y = "Emergency Medicine Doctors (MD) per Capita")
 
 (md_emerg_med_change <- linear_reg() %>% 
   set_engine("lm") %>% 
-  fit(md_emerg_med_count/all_md_count ~ physician_count_year + pct_below_pov_line, data = all_physicians))
+  fit(md_emerg_med_count/all_md_count ~ physician_count_year, data = all_physicians))
 
 tidy(md_emerg_med_change)
+glance(md_emerg_med_change)
 
 (md_emerg_med_change_aug <- augment(md_emerg_med_change$fit))
 
@@ -715,6 +838,156 @@ glance(md_emerg_med_change)$adj.r.squared %>%
   tidy()
 ```
 
+```{r md-emerg-med-pov-model}
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_emerg_med_count/all_md_count, color = pct_below_pov_line)) + 
+  geom_point(position = "jitter", alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() +
+  labs(title = "Emergency Medicine Doctors (MD) per Capita by Year and \nPercent Below Poverty Line", x = "Year", y = "Emergency Medicine Doctors (MD) per Capita", color = "Percent Below Poverty Line") +
+  scale_color_viridis_c()
+
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_emerg_med_count/all_md_count, color = county_name)) + 
+  geom_point(position = "jitter", alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() +
+  labs(title = "Emergency Medicine Doctors (MD) per Capita by Year and County", x = "Year", y = "Emergency Medicine Doctors (MD) per Capita", color = "County") +
+  scale_color_viridis_d()
+
+(md_emerg_med_change_pov <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  fit(md_emerg_med_count/all_md_count ~ physician_count_year + pct_below_pov_line, data = all_physicians))
+
+tidy(md_emerg_med_change_pov)
+glance(md_emerg_med_change_pov)
+
+(md_emerg_med_change_pov_aug <- augment(md_emerg_med_change_pov$fit))
+
+md_emerg_med_change_pov_aug %>% 
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() +
+  labs(title = "Fitted and Residual Values", subtitle = "Emergency medicine doctor (MD) count divided by all MDs by \npercent of the population below the poverty line.")
+
+glance(md_emerg_med_change_pov)$r.squared %>% 
+  tidy()
+glance(md_emerg_med_change_pov)$adj.r.squared %>% 
+  tidy()
+```
+
+```{r md-fammed-count-model}
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_fammed_count/all_md_count)) + 
+  geom_point(position = "jitter", alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() +
+  labs(title = "Family Medicine Doctors (MD) per Capita by Year", x = "Year", y = "Family Medicine Doctors (MD) per Capita")
 
 
+(md_fammed_change <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  fit(md_fammed_count/all_md_count ~ physician_count_year, data = all_physicians))
+
+tidy(md_fammed_change)
+glance(md_fammed_change)
+
+(md_fammed_change_aug <- augment(md_fammed_change$fit))
+
+md_fammed_change_aug %>% 
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() 
+
+glance(md_fammed_change)$r.squared %>% 
+  tidy()
+glance(md_fammed_change)$adj.r.squared %>% 
+  tidy()
+```
+```{r md-fammed-count-pov-model}
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_fammed_count/all_md_count, color = pct_below_pov_line)) + 
+  geom_point(position = "jitter", alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") + 
+  theme_minimal() +
+  labs(title = "Family Medicine Doctors (MD) per Capita by Year and Percent \nBelow Poverty Line", x = "Year", y = "Family Medicine Doctors (MD) per Capita", color = "Percent Below Poverty Line") +
+  scale_color_viridis_c() 
+
+(md_fammed_change_pov <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  fit(md_fammed_count/all_md_count ~ physician_count_year + pct_below_pov_line, data = all_physicians))
+
+tidy(md_fammed_change_pov)
+glance(md_fammed_change_pov)
+
+(md_fammed_change_pov_aug <- augment(md_fammed_change_pov$fit))
+
+md_fammed_change_pov_aug %>% 
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() 
+
+glance(md_fammed_change_pov)$r.squared %>% 
+  tidy()
+glance(md_fammed_change_pov)$adj.r.squared %>% 
+  tidy()
+```
+
+```{r}
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_gen_ped_count/all_md_count)) + 
+  geom_point(position = "jitter", alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE)
+
+(md_gen_ped_change <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  fit(md_gen_ped_count/all_md_count ~ physician_count_year, data = all_physicians))
+
+tidy(md_gen_ped_change)
+glance(md_gen_ped_change)
+
+(md_gen_ped_change_aug <- augment(md_gen_ped_change$fit))
+
+md_gen_ped_change_aug %>% 
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() 
+
+glance(md_gen_ped_change)$r.squared %>% 
+  tidy()
+glance(md_gen_ped_change)$adj.r.squared %>% 
+  tidy()
+```
+
+```{r}
+all_physicians %>% 
+  ggplot(aes(x = physician_count_year, y = md_gen_ped_count/all_md_count, color = pct_below_pov_line)) + 
+  geom_point(position = "jitter", alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_color_viridis_c()
+
+(md_gen_ped_change_pov <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  fit(md_gen_ped_count/all_md_count ~ physician_count_year + pct_below_pov_line, data = all_physicians))
+
+tidy(md_gen_ped_change_pov)
+glance(md_gen_ped_change_pov)
+
+(md_gen_ped_change_pov_aug <- augment(md_gen_ped_change_pov$fit))
+
+md_gen_ped_change_pov_aug %>% 
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "#009796") +
+  theme_minimal() 
+
+glance(md_gen_ped_change_pov)$r.squared %>% 
+  tidy()
+glance(md_gen_ped_change_pov)$adj.r.squared %>% 
+  tidy()
+```
 
