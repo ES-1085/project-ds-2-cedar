@@ -6,34 +6,40 @@ output: github_document
 
 ## Summary
 
-Write-up of your project and findings go here. 
-Think of this as the text of your presentation. 
-The length should be roughly 5 minutes when read out loud.
-Although pacing varies, a 5-minute speech is roughly 750 words. 
-To use the word count addin, select the text you want to count the words of (probably this is the 
-Summary section of this document, go to Addins, and select the `Word count` addin).
-This addin counts words using two different algorithms, but the results should be similar and as long as you're in the ballpark of 750 words, you're good! 
-The addin will ignore code chunks and only count the words in prose.
+### Healthcare in Rural Maine
 
-You can also load your data here and present any analysis results / plots, but I strongly urge you to keep that to a minimum (maybe only the most important graphic, if you have one you can choose). 
-And make sure to hide your code with  `echo = FALSE` unless the point you are trying to make is about the code itself.
-Your results with proper output and graphics go in your presentation, this space is for a brief summary of your project.
+Residents of rural areas routinely face more barriers to accessing health care than their urban counterparts, including distance, lack of education, poor health literacy, insurance coverage, poverty, and provider shortage. The Health Resources and Services Administration releases the `Area Health Resource Files` data each year, detailing demographic, economic, and medical data for each county in the United States. It also includes a `Health Provider Shortage Area` score for primary care, dental care, and mental health care in each county. For this analysis, I focused on variables that included facility information, care types, hospital admissions, provider counts, and some demographic and economic information for each of Maine's 16 counties. It is important to note that this is not intended to be a complete analysis. Rather, I used this as an opportunity to explore a dataset that I found particularly interesting. 
 
-```{r load-data, echo = FALSE}
-# load data here, if you like
-```
+The primary questions I considered as I created this project were: 
+  1) Are primary care providers per capita equivalent in each county?
+  2) how has the number of providers in each county changed over time? 
+  3) Is the percent of a county’s population below the poverty line a factor to consider when modeling change in providers over time?
+  
+I found that, overall, many counties had an adequate number of primary care providers per capita, but many, including Androscoggin, Oxford, Piscataquis, Sagadahoc, Somerset, Waldo, and Washington were still lacking access to providers. Additonally, Cumberland county (the most populous county in the state), routinely had the most physicians of all types I measured. Maine Medical Center, the largest hospital in the state, is located in Cumberland county, which could explain why there are so many more providers there than in the rest of the state. However, when looking at provider count per capita, many counties were still lagging behind. For example, Family Medicine doctors (MD) have increased in Cumberland county, but decreased in many others including Androscoggin, Franklin, and Piscataquis. Every county besides Cumberland has a low psychaitrist per capita count, and Aroostook county has such a low psychiatrist count that it registered as 0 in the provider per capita graphs. 
+
+When creating linear regression models for this dataset, I was curious if poverty was a predictor for provider counts in each county. Instead, I discovered that with the data I had (my poverty count was from the National Institute on Minority Health and Health Disparities), the percent of the population below the poverty line was actually a relatively accurate predictor for county. However, I am curious if using poverty data from a different source or in a different type model would create a different result. 
+
+There were several limiting factors in this dataset, including time, knowledge, and the sheer size of the dataset. If I had used every variable I found interesting, I still would have hundreds of variables. I also did not have as much time as I would have liked, leading this project to be more of an exploration than a complete analysis. Additionally, my knowledge of models is lacking, and I am curious if there are other types of models that would be better suited for this type of analysis. 
+
+When considering next steps, I would love to be able to tidy the entire dataset. The nature of it meant that it came in a very untidy format, and much of my time was spent wrangling the data into a useable form. I imagine that there is much more usable information and I would love to be able to access it. I would also be interested in doing more spatial analysis. This dataset did not come with any spatial link besides County and a FIPS code, meaning I was unable to visualize provider counts, hospital distribution, income, or facility types on any sort of map. I believe that would be a very effective visualization for this data and would be interested in figuring out how to add a spatial link in the future. 
+
+Overall, this exploratory project was an excellent opportunity to become more comfortable with several types of data wrangling and modeling, and I am excited to pick this project up again in the future. 
 
 ## Presentation
 
-Our presentation can be found [here](presentation/presentation.html).
+A PDF of our presentation can be found in the presentation folder of this project.
 
 ## Data 
 
-Include a citation for your data here. 
-See http://libraryguides.vu.edu.au/c.php?g=386501&p=4347840 for guidance on proper citation for datasets. 
-If you got your data off the web, make sure to note the retrieval date.
+Data downloaded from the Health Resources and Services Administration. The `Area Health Resource Files` from 2019 to 2023 were used in this analysis. 
+[Data download](https://data.hrsa.gov/data/download)
 
 ## References
 
-List any references here. You should, at a minimum, list your data source.
+Area Health Resources Files. (n.d.). Data.hrsa.gov. https://data.hrsa.gov/topics/health-workforce/ahrf
+
+Rural Health Information Hub. (2021). Healthcare access in rural communities introduction. Rural Health Information Hub. https://www.ruralhealthinfo.org/topics/healthcare-access
+
+(2024). Nih.gov. https://hdpulse.nimhd.nih.gov/data-portal/social/table?socialtopic=080&socialtopic_options=social_6&demo=00008&demo_options=poverty_3&race=00&race_options=race_7&sex=0&sex_options=sex_3&age=001&age_options=ageall_1&statefips=23&statefips_options=area_states
+
 
